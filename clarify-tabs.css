@@ -1,15 +1,16 @@
-/* Clarify — "What Clarify does" tab visuals
-   Hosted: https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@1/clarify-tabs.min.css
+/* Clarify — section visuals (What Clarify does · How it works · Built to extend), one file for all
+   Hosted: https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@2/clarify-tabs.min.css
    Link it in Webflow: Site settings → Custom code → Head.
    Part 1 = how the visuals look · Part 2 = how they move. Pure CSS.
-   Needs: .is-active on the open panel, data-tabs (+ data-prev-tab) on the tab root. See README. */
+   Needs: .is-active on the open panel, data-cv="tabs" (+ data-cv-prev) on your wrapper. See README.
+   Naming (Lumos, like the site): cv_* elements, is-* combo classes (variants, states), data-cv hooks. */
 
 /* ################################ PART 1 · LOOK ################################ */
 /* ============================================================
    Tokens (dark mode values from Figma) — scoped to the visuals, so they never clash with the
    site's own variables
    ============================================================ */
-.cv-frame {
+.cv_frame {
   --page: #0a0b0d;
   --text-primary: #f8fbfd;
   --text-muted: #b5b5b5;
@@ -26,28 +27,28 @@
   --font-sans: "Geist", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
 }
-.cv .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.cv_visual .cv_mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
 /* ============================================================
    Visual — tab 1 "Live view" (432×470)
    ============================================================ */
-.cv { font-variant-numeric: tabular-nums; }   /* design.md: tabular nums everywhere */
+.cv_visual { font-variant-numeric: tabular-nums; }   /* design.md: tabular nums everywhere */
 /* Frame = the tab panel's visual area. It fills whatever panel it's in — the panel's height is
    set by the tab copy on the left and the screen width, so it changes — and centres the visual.
    It is a size container: the visual inside scales to fit it (width AND height) in pure CSS, see
-   "Scale" below. Only when the panel has no height of its own (e.g. stacked on phones) does the
+   "Scale" below. Only when the panel has no height of its own (e.is-grid. stacked on phones) does the
    frame fall back to the Figma panel shape. */
-.cv-frame { box-sizing: border-box; width: 100%; height: 100%; aspect-ratio: 628 / 716; padding: 16px;
+.cv_frame { box-sizing: border-box; width: 100%; height: 100%; aspect-ratio: 628 / 716; padding: 16px;
   container-type: size;
   display: grid; place-items: center;
   min-height: 0; overflow: hidden; }   /* never stretched by the visual */
-.cv-frame--how { aspect-ratio: 628 / 613; }
+.cv_frame.is-how { aspect-ratio: 628 / 613; }
 /* Stacked layout (phones): no tabs — each visual sits above its copy in a Figma 301 × 433 panel
    (unless the panel is given its own height) and plays once when it scrolls into view. */
-.cv-stacked .cv-frame { aspect-ratio: 301 / 433; }
+.is-cv-stacked .cv_frame { aspect-ratio: 301 / 433; }
 /* Webflow wraps Code Embeds in .w-embed — let it fill the panel too */
-.w-embed:has(> .cv-frame) { width: 100%; height: 100%; }
-.cv-frame > .cv { margin: 0; }
+.w-embed:has(> .cv_frame) { width: 100%; height: 100%; }
+.cv_frame > .cv_visual { margin: 0; }
 
 /* ============================================================
    Scale — every size inside a visual is written in Figma px × --cv-u ("one Figma pixel").
@@ -56,170 +57,170 @@
    together, like a scaled image, but stays real HTML/CSS. Hairlines (≤ 1px) stay 1px.
    ============================================================ */
 @property --cv-u { syntax: "<length>"; inherits: true; initial-value: 1px; }
-.cv { --cv-w: 432; --cv-h: 478;
+.cv_visual { --cv-w: 432; --cv-h: 478;
   --cv-u: min(1px, calc(100cqw / var(--cv-w)), calc(100cqh / var(--cv-h))); }
-.cv--agent  { --cv-w: 522; --cv-h: 420; }
-.cv--route  { --cv-w: 434; --cv-h: 520; }
-.cv--tail   { --cv-w: 434; --cv-h: 322; }
-.cv--expr   { --cv-w: 434; --cv-h: 387; }
-.cv--act    { --cv-w: 434; --cv-h: 484; }
-.cv--notify, .cv--ask, .cv--build { --cv-w: 451; --cv-h: 451; }
-.cv { width: calc(432 * var(--cv-u)); display: flex; flex-direction: column; align-items: center; gap: calc(20 * var(--cv-u)); }
+.cv_visual.is-agent-log  { --cv-w: 522; --cv-h: 420; }
+.cv_visual.is-routing  { --cv-w: 434; --cv-h: 520; }
+.cv_visual.is-capture   { --cv-w: 434; --cv-h: 322; }
+.cv_visual.is-transform   { --cv-w: 434; --cv-h: 387; }
+.cv_visual.is-act    { --cv-w: 434; --cv-h: 484; }
+.cv_visual.is-notify, .cv_visual.is-ask, .cv_visual.is-build { --cv-w: 451; --cv-h: 451; }
+.cv_visual { width: calc(432 * var(--cv-u)); display: flex; flex-direction: column; align-items: center; gap: calc(20 * var(--cv-u)); }
 
 /* glass recipe */
-.glass-back { background: var(--glass-back); border: 1px solid var(--glass-line);
+.cv_glass_back { background: var(--glass-back); border: 1px solid var(--glass-line);
   backdrop-filter: blur(calc(75 * var(--cv-u))); -webkit-backdrop-filter: blur(calc(75 * var(--cv-u))); }
-.glass-panel { background: var(--glass-panel); border: 1px solid var(--glass-line);
+.cv_glass_panel { background: var(--glass-panel); border: 1px solid var(--glass-line);
   backdrop-filter: blur(calc(50 * var(--cv-u))); -webkit-backdrop-filter: blur(calc(50 * var(--cv-u))); }
 
 /* sources */
-.cv-sources { display: flex; gap: calc(12 * var(--cv-u)); width: 100%; }
-.cv-tile { flex: 1; border-radius: calc(10 * var(--cv-u)); padding: calc(3 * var(--cv-u)); }
-.cv-tile > div { border-radius: calc(7 * var(--cv-u)); padding: calc(7 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(3 * var(--cv-u)); }
-.cv-tile .label { font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); font-weight: 500; }
-.cv-tile .count { font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 500; display: flex; gap: calc(3 * var(--cv-u)); }
+.cv_sources { display: flex; gap: calc(12 * var(--cv-u)); width: 100%; }
+.cv_tile { flex: 1; border-radius: calc(10 * var(--cv-u)); padding: calc(3 * var(--cv-u)); }
+.cv_tile > div { border-radius: calc(7 * var(--cv-u)); padding: calc(7 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(3 * var(--cv-u)); }
+.cv_tile .cv_label { font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); font-weight: 500; }
+.cv_tile .cv_tile_count { font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 500; display: flex; gap: calc(3 * var(--cv-u)); }
 
-.cv-connector { display: block; width: calc(290 * var(--cv-u)); height: calc(37 * var(--cv-u)); overflow: visible; }
+.cv_connector { display: block; width: calc(290 * var(--cv-u)); height: calc(37 * var(--cv-u)); overflow: visible; }
 
 /* live operation card */
-.cv-card { width: 100%; border-radius: calc(17 * var(--cv-u)); padding: calc(7 * var(--cv-u)); }
-.cv-card > .inner { border-radius: calc(10 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(20 * var(--cv-u)); }
-.cv-head { display: flex; flex-direction: column; gap: calc(3 * var(--cv-u)); }
-.cv-head .title { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; }
-.cv-head .ctx { font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--text-muted); }
+.cv_card { width: 100%; border-radius: calc(17 * var(--cv-u)); padding: calc(7 * var(--cv-u)); }
+.cv_card > .cv_inner { border-radius: calc(10 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(20 * var(--cv-u)); }
+.cv_head { display: flex; flex-direction: column; gap: calc(3 * var(--cv-u)); }
+.cv_head .cv_title { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; }
+.cv_head .cv_meta { font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--text-muted); }
 
-.cv-chart { display: flex; flex-direction: column; gap: calc(7 * var(--cv-u)); }
-.cv-plot { position: relative; width: calc(385 * var(--cv-u)); height: calc(73 * var(--cv-u)); }
-.cv-grid { position: absolute; left: calc(10 * var(--cv-u)); top: calc(3 * var(--cv-u)); width: calc(375 * var(--cv-u)); height: calc(69 * var(--cv-u)); }
-.cv-line { position: absolute; left: calc(10 * var(--cv-u)); top: calc(11 * var(--cv-u)); width: calc(365 * var(--cv-u)); height: calc(53 * var(--cv-u)); overflow: visible; }
-.cv-dot { position: absolute; width: calc(10 * var(--cv-u)); height: calc(10 * var(--cv-u)); border-radius: 50%; background: var(--sage-600); }
-.cv-ticks { display: flex; justify-content: space-between; font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: var(--tick); }
+.cv_chart { display: flex; flex-direction: column; gap: calc(7 * var(--cv-u)); }
+.cv_plot { position: relative; width: calc(385 * var(--cv-u)); height: calc(73 * var(--cv-u)); }
+.cv_grid { position: absolute; left: calc(10 * var(--cv-u)); top: calc(3 * var(--cv-u)); width: calc(375 * var(--cv-u)); height: calc(69 * var(--cv-u)); }
+.cv_line { position: absolute; left: calc(10 * var(--cv-u)); top: calc(11 * var(--cv-u)); width: calc(365 * var(--cv-u)); height: calc(53 * var(--cv-u)); overflow: visible; }
+.cv_dot { position: absolute; width: calc(10 * var(--cv-u)); height: calc(10 * var(--cv-u)); border-radius: 50%; background: var(--sage-600); }
+.cv_ticks { display: flex; justify-content: space-between; font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: var(--tick); }
 
-.cv-context { display: flex; flex-direction: column; gap: calc(3 * var(--cv-u)); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); }
-.cv-context .trend { display: flex; gap: calc(3 * var(--cv-u)); font-weight: 500; }
-.cv-context .src { color: var(--text-muted); }
+.cv_context { display: flex; flex-direction: column; gap: calc(3 * var(--cv-u)); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); }
+.cv_context .cv_trend { display: flex; gap: calc(3 * var(--cv-u)); font-weight: 500; }
+.cv_context .cv_source { color: var(--text-muted); }
 
-.cv-rows { display: flex; flex-direction: column; gap: calc(10 * var(--cv-u)); width: calc(378 * var(--cv-u)); }
-.cv-row { display: flex; align-items: center; justify-content: space-between; height: calc(18 * var(--cv-u));
+.cv_rows { display: flex; flex-direction: column; gap: calc(10 * var(--cv-u)); width: calc(378 * var(--cv-u)); }
+.cv_row { display: flex; align-items: center; justify-content: space-between; height: calc(18 * var(--cv-u));
   padding: 0 calc(10 * var(--cv-u)); border-left: calc(2 * var(--cv-u)) solid var(--row-c); font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); font-weight: 500; }
-.cv-row .data { display: flex; align-items: center; gap: calc(10 * var(--cv-u)); }
-.cv-row .val { display: flex; gap: calc(3 * var(--cv-u)); }
-.cv-pill { display: inline-flex; align-items: center; gap: calc(3 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(7 * var(--cv-u)); border-radius: calc(10 * var(--cv-u));
+.cv_row .cv_data { display: flex; align-items: center; gap: calc(10 * var(--cv-u)); }
+.cv_row .cv_reading { display: flex; gap: calc(3 * var(--cv-u)); }
+.cv_pill { display: inline-flex; align-items: center; gap: calc(3 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(7 * var(--cv-u)); border-radius: calc(10 * var(--cv-u));
   background: var(--sage-300); color: var(--sage-900); font-size: calc(10 * var(--cv-u)); line-height: 1; }
-.cv-pill::before { content: ""; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
+.cv_pill::before { content: ""; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
 
 /* tab 2: notes (Mist = people) */
-.cv-frame { --mist-dot: #a4c9e9; --mist-tag: #c4dcf2; --mist-ink: #2a4a65; }
-.cv-note-tag { position: absolute; top: calc(-8 * var(--cv-u)); height: calc(16 * var(--cv-u)); padding: calc(2 * var(--cv-u)) calc(6 * var(--cv-u)); border-radius: calc(3 * var(--cv-u)) calc(3 * var(--cv-u)) calc(3 * var(--cv-u)) 0;
+.cv_frame { --mist-dot: #a4c9e9; --mist-tag: #c4dcf2; --mist-ink: #2a4a65; }
+.cv_note_tag { position: absolute; top: calc(-8 * var(--cv-u)); height: calc(16 * var(--cv-u)); padding: calc(2 * var(--cv-u)) calc(6 * var(--cv-u)); border-radius: calc(3 * var(--cv-u)) calc(3 * var(--cv-u)) calc(3 * var(--cv-u)) 0;
   background: var(--mist-tag); color: var(--mist-ink); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 500;
   white-space: nowrap; transform-origin: 0 100%; }  /* flag: pole = left edge */
-.cv-note-line { position: absolute; top: calc(8 * var(--cv-u)); width: 1px; opacity: .7;
+.cv_note_line { position: absolute; top: calc(8 * var(--cv-u)); width: 1px; opacity: .7;
   background: repeating-linear-gradient(to bottom, var(--mist-dot) 0 calc(3 * var(--cv-u)), transparent calc(3 * var(--cv-u)) calc(6 * var(--cv-u))); }
-.cv-note-dot { position: absolute; width: calc(10 * var(--cv-u)); height: calc(10 * var(--cv-u)); border-radius: 50%; background: var(--mist-dot); }
-.cv-pill--mist { background: var(--mist-tag); color: var(--mist-ink); }
-.cv-pill--mist::before { display: none; }
+.cv_note_dot { position: absolute; width: calc(10 * var(--cv-u)); height: calc(10 * var(--cv-u)); border-radius: 50%; background: var(--mist-dot); }
+.cv_pill.is-mist { background: var(--mist-tag); color: var(--mist-ink); }
+.cv_pill.is-mist::before { display: none; }
 
 /* ============================================================
    Visual — tab 3 "Agent log" (522×413)
    ============================================================ */
-.cv-frame { --muted-2: #b7bec5; --mauve-300: #dab7d6; --mauve-200: #e9d0e6; --mauve-ink: #583c56; }
-.cv--agent { width: max-content; min-width: calc(522 * var(--cv-u)); }
-.cv--agent .cv-card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
-.cv--agent .cv-card > .inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(20 * var(--cv-u)); }
-.cv-ahead { display: flex; justify-content: space-between; align-items: flex-start; gap: calc(12 * var(--cv-u)); }
-.cv-ahead .title { font-size: calc(16 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; }
-.cv-ahead .sub { font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); margin-top: calc(4 * var(--cv-u)); }
-.cv-live { display: inline-flex; align-items: center; gap: calc(6 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(12 * var(--cv-u));
+.cv_frame { --muted-2: #b7bec5; --mauve-300: #dab7d6; --mauve-200: #e9d0e6; --mauve-ink: #583c56; }
+.cv_visual.is-agent-log { width: max-content; min-width: calc(522 * var(--cv-u)); }
+.cv_visual.is-agent-log .cv_card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
+.cv_visual.is-agent-log .cv_card > .cv_inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(20 * var(--cv-u)); }
+.cv_ahead { display: flex; justify-content: space-between; align-items: flex-start; gap: calc(12 * var(--cv-u)); }
+.cv_ahead .cv_title { font-size: calc(16 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; }
+.cv_ahead .cv_sub { font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); margin-top: calc(4 * var(--cv-u)); }
+.cv_live { display: inline-flex; align-items: center; gap: calc(6 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(12 * var(--cv-u));
   background: var(--sage-300); color: var(--sage-900); font-size: calc(12 * var(--cv-u)); line-height: 1; font-weight: 500; }
-.cv-live i { position: relative; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
-.cv-kpis { display: flex; gap: calc(4 * var(--cv-u)); }
-.cv-kpi { flex: 1; background: rgb(249 250 252 / .04); border-radius: calc(8 * var(--cv-u)); padding: calc(12 * var(--cv-u));
+.cv_live i { position: relative; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
+.cv_kpis { display: flex; gap: calc(4 * var(--cv-u)); }
+.cv_kpi { flex: 1; background: rgb(249 250 252 / .04); border-radius: calc(8 * var(--cv-u)); padding: calc(12 * var(--cv-u));
   display: flex; flex-direction: column; gap: calc(6 * var(--cv-u)); }
-.cv-eyebrow { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); letter-spacing: .08em;
+.cv_eyebrow { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); letter-spacing: .08em;
   text-transform: uppercase; color: var(--muted-2); }
-.cv-kpi .value { display: flex; align-items: baseline; gap: calc(4 * var(--cv-u)); }
-.cv-kpi .num { font-family: var(--font-mono); font-size: calc(20 * var(--cv-u)); line-height: calc(24 * var(--cv-u)); font-weight: 500;
+.cv_kpi .cv_value { display: flex; align-items: baseline; gap: calc(4 * var(--cv-u)); }
+.cv_kpi .cv_num { font-family: var(--font-mono); font-size: calc(20 * var(--cv-u)); line-height: calc(24 * var(--cv-u)); font-weight: 500;
   font-variant-numeric: tabular-nums; position: relative; }
-.cv-kpi .unit { font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); }
-.cv-table { display: grid; grid-template-columns: calc(12 * var(--cv-u)) calc(40 * var(--cv-u)) minmax(calc(64 * var(--cv-u)), max-content) 1fr calc(64 * var(--cv-u)); column-gap: calc(12 * var(--cv-u)); }
-.cv-cols, .cv-trow, .cv-history { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center; }
-.cv-cols { padding-bottom: calc(10 * var(--cv-u)); }
-.cv-cols .r, .cv-trow .cv-status { text-align: right; }
-.cv-trow { height: calc(37 * var(--cv-u)); border-top: 1px solid var(--glass-line); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); }
-.cv-trow .time { font-family: var(--font-mono); color: var(--muted-2); }
-.cv-trow .tank { display: flex; gap: calc(4 * var(--cv-u)); white-space: nowrap; }
-.cv-lead { color: var(--mauve-300); font-weight: 600; }
-.cv-chips { display: flex; gap: calc(4 * var(--cv-u)); white-space: nowrap; }
-.cv-chip { padding: calc(2 * var(--cv-u)) calc(6 * var(--cv-u)); border-radius: calc(4 * var(--cv-u)); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 500;
+.cv_kpi .cv_unit { font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); }
+.cv_table { display: grid; grid-template-columns: calc(12 * var(--cv-u)) calc(40 * var(--cv-u)) minmax(calc(64 * var(--cv-u)), max-content) 1fr calc(64 * var(--cv-u)); column-gap: calc(12 * var(--cv-u)); }
+.cv_cols, .cv_trow, .cv_history { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center; }
+.cv_cols { padding-bottom: calc(10 * var(--cv-u)); }
+.cv_cols .is-right, .cv_trow .cv_status { text-align: right; }
+.cv_trow { height: calc(37 * var(--cv-u)); border-top: 1px solid var(--glass-line); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); }
+.cv_trow .cv_time { font-family: var(--font-mono); color: var(--muted-2); }
+.cv_trow .cv_tank { display: flex; gap: calc(4 * var(--cv-u)); white-space: nowrap; }
+.cv_lead { color: var(--mauve-300); font-weight: 600; }
+.cv_chips { display: flex; gap: calc(4 * var(--cv-u)); white-space: nowrap; }
+.cv_chip { padding: calc(2 * var(--cv-u)) calc(6 * var(--cv-u)); border-radius: calc(4 * var(--cv-u)); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 500;
   color: var(--mauve-ink); background: var(--mauve-300); opacity: .35; }
-.cv-trow--new .time { color: var(--text-primary); }
-.cv-trow--new .cv-chip { background: var(--mauve-200); opacity: 1; }
-.cv-status { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); letter-spacing: .08em; }
-.cv-status--done { color: var(--muted-2); opacity: .6; }
-.cv-foot { display: flex; justify-content: space-between; padding-top: calc(12 * var(--cv-u)); border-top: 1px solid var(--glass-line);
+.cv_trow.is-new .cv_time { color: var(--text-primary); }
+.cv_trow.is-new .cv_chip { background: var(--mauve-200); opacity: 1; }
+.cv_status { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); letter-spacing: .08em; }
+.cv_status.is-done { color: var(--muted-2); opacity: .6; }
+.cv_foot { display: flex; justify-content: space-between; padding-top: calc(12 * var(--cv-u)); border-top: 1px solid var(--glass-line);
   font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: var(--muted-2); }
-.cv-foot .ok { color: var(--sage-600); }
+.cv_foot .cv_foot_ok { color: var(--sage-600); }
 
 /* ============================================================
    Visual — tab 4 "Routing" (434×520)
    ============================================================ */
-.cv--route { width: calc(434 * var(--cv-u)); gap: 0; }
-.cv-event { width: calc(362 * var(--cv-u)); border-radius: calc(16 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
-.cv-event > div { border-radius: calc(12 * var(--cv-u)); padding: calc(10 * var(--cv-u)) calc(12 * var(--cv-u)); display: flex; align-items: center; gap: calc(10 * var(--cv-u)); }
-.cv-icon { flex: none; display: grid; place-items: center; border-radius: calc(8 * var(--cv-u)); background: rgb(249 250 252 / .1);
+.cv_visual.is-routing { width: calc(434 * var(--cv-u)); gap: 0; }
+.cv_event { width: calc(362 * var(--cv-u)); border-radius: calc(16 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
+.cv_event > div { border-radius: calc(12 * var(--cv-u)); padding: calc(10 * var(--cv-u)) calc(12 * var(--cv-u)); display: flex; align-items: center; gap: calc(10 * var(--cv-u)); }
+.cv_icon { flex: none; display: grid; place-items: center; border-radius: calc(8 * var(--cv-u)); background: rgb(249 250 252 / .1);
   font-size: calc(13 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); font-weight: 500; }
-.cv-icon--lg { width: calc(28 * var(--cv-u)); height: calc(28 * var(--cv-u)); }
-.cv-icon--sm { width: calc(24 * var(--cv-u)); height: calc(24 * var(--cv-u)); }
-.cv-icon .ai { color: var(--mauve-300); }
-.cv-icon .m { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); }
-.cv-event .txt { flex: 1; display: flex; flex-direction: column; gap: calc(2 * var(--cv-u)); }
-.cv-event .title { font-size: calc(13 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); font-weight: 500; }
-.cv-event .time { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: var(--muted-2); }
-.cv-rconn { display: block; width: calc(4 * var(--cv-u)); height: calc(32 * var(--cv-u)); overflow: visible; }
-.cv--route .cv-card { width: calc(434 * var(--cv-u)); border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
-.cv--route .cv-card > .inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(12 * var(--cv-u)); }
-.cv-rhead { padding-bottom: calc(4 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(4 * var(--cv-u)); }
-.cv-rhead .title { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; }
-.cv-rhead .sub { font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--muted-2); }
-.cv-dest { height: calc(45 * var(--cv-u)); display: grid; grid-template-columns: calc(24 * var(--cv-u)) calc(88 * var(--cv-u)) 1fr calc(28 * var(--cv-u)); column-gap: calc(10 * var(--cv-u)); align-items: center;
+.cv_icon.is-lg { width: calc(28 * var(--cv-u)); height: calc(28 * var(--cv-u)); }
+.cv_icon.is-sm { width: calc(24 * var(--cv-u)); height: calc(24 * var(--cv-u)); }
+.cv_icon .cv_ai_mark { color: var(--mauve-300); }
+.cv_icon .is-mono { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); }
+.cv_event .cv_text { flex: 1; display: flex; flex-direction: column; gap: calc(2 * var(--cv-u)); }
+.cv_event .cv_title { font-size: calc(13 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); font-weight: 500; }
+.cv_event .cv_time { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: var(--muted-2); }
+.cv_rconn { display: block; width: calc(4 * var(--cv-u)); height: calc(32 * var(--cv-u)); overflow: visible; }
+.cv_visual.is-routing .cv_card { width: calc(434 * var(--cv-u)); border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
+.cv_visual.is-routing .cv_card > .cv_inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(12 * var(--cv-u)); }
+.cv_rhead { padding-bottom: calc(4 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(4 * var(--cv-u)); }
+.cv_rhead .cv_title { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; }
+.cv_rhead .cv_sub { font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--muted-2); }
+.cv_dest { height: calc(45 * var(--cv-u)); display: grid; grid-template-columns: calc(24 * var(--cv-u)) calc(88 * var(--cv-u)) 1fr calc(28 * var(--cv-u)); column-gap: calc(10 * var(--cv-u)); align-items: center;
   border-top: 1px solid var(--glass-line); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); }
-.cv-dest .ch { font-weight: 500; }
-.cv-dest .tg { color: var(--muted-2); }
-.cv-dest .tg.m { font-family: var(--font-mono); font-size: calc(11 * var(--cv-u)); }
-.cv-toggle { position: relative; width: calc(28 * var(--cv-u)); height: calc(16 * var(--cv-u)); border-radius: calc(8 * var(--cv-u)); background: var(--sage-300); }
-.cv-toggle::after { content: ""; position: absolute; left: calc(14 * var(--cv-u)); top: calc(2 * var(--cv-u)); width: calc(12 * var(--cv-u)); height: calc(12 * var(--cv-u)); border-radius: 50%;
+.cv_dest .cv_channel { font-weight: 500; }
+.cv_dest .cv_target { color: var(--muted-2); }
+.cv_dest .cv_target.is-mono { font-family: var(--font-mono); font-size: calc(11 * var(--cv-u)); }
+.cv_toggle { position: relative; width: calc(28 * var(--cv-u)); height: calc(16 * var(--cv-u)); border-radius: calc(8 * var(--cv-u)); background: var(--sage-300); }
+.cv_toggle::after { content: ""; position: absolute; left: calc(14 * var(--cv-u)); top: calc(2 * var(--cv-u)); width: calc(12 * var(--cv-u)); height: calc(12 * var(--cv-u)); border-radius: 50%;
   background: var(--sage-900); }
-.cv-add { position: relative; height: calc(38 * var(--cv-u)); display: flex; align-items: center; justify-content: center; gap: calc(8 * var(--cv-u));
+.cv_add { position: relative; height: calc(38 * var(--cv-u)); display: flex; align-items: center; justify-content: center; gap: calc(8 * var(--cv-u));
   font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); }
-.cv-add svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.cv_add svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 
 
 /* ---------- chart slots — geometry is identical in every vertical ---------- */
-.cv-dot.cv-1 { left: calc(5 * var(--cv-u));   top: calc(59 * var(--cv-u)); }
-.cv-dot.cv-2 { left: calc(90 * var(--cv-u));  top: calc(36 * var(--cv-u)); }
-.cv-dot.cv-3 { left: calc(168 * var(--cv-u)); top: calc(43 * var(--cv-u)); }
-.cv-dot.cv-4 { left: calc(243 * var(--cv-u)); top: calc(19 * var(--cv-u)); }
-.cv-dot.cv-5 { left: calc(315 * var(--cv-u)); top: calc(25 * var(--cv-u)); }
-.cv-dot.cv-6 { left: calc(370 * var(--cv-u)); top: calc(6 * var(--cv-u)); }
+.cv_dot.is-1 { left: calc(5 * var(--cv-u));   top: calc(59 * var(--cv-u)); }
+.cv_dot.is-2 { left: calc(90 * var(--cv-u));  top: calc(36 * var(--cv-u)); }
+.cv_dot.is-3 { left: calc(168 * var(--cv-u)); top: calc(43 * var(--cv-u)); }
+.cv_dot.is-4 { left: calc(243 * var(--cv-u)); top: calc(19 * var(--cv-u)); }
+.cv_dot.is-5 { left: calc(315 * var(--cv-u)); top: calc(25 * var(--cv-u)); }
+.cv_dot.is-6 { left: calc(370 * var(--cv-u)); top: calc(6 * var(--cv-u)); }
 /* note N hangs from a pole at x, over dot N (tag's left edge = pole) */
-.cv-note.cv-1 .cv-note-line { left: calc(95 * var(--cv-u));  height: calc(28 * var(--cv-u)); }  .cv-note.cv-1 .cv-note-dot { left: calc(90 * var(--cv-u));  top: calc(36 * var(--cv-u)); }  .cv-note.cv-1 .cv-note-tag { left: calc(95 * var(--cv-u)); }
-.cv-note.cv-2 .cv-note-line { left: calc(248 * var(--cv-u)); height: calc(11 * var(--cv-u)); }  .cv-note.cv-2 .cv-note-dot { left: calc(243 * var(--cv-u)); top: calc(19 * var(--cv-u)); }  .cv-note.cv-2 .cv-note-tag { left: calc(248 * var(--cv-u)); }
-.cv-note.cv-3 .cv-note-line { left: calc(320 * var(--cv-u)); height: calc(17 * var(--cv-u)); }  .cv-note.cv-3 .cv-note-dot { left: calc(315 * var(--cv-u)); top: calc(25 * var(--cv-u)); }  .cv-note.cv-3 .cv-note-tag { left: calc(320 * var(--cv-u)); }
+.cv_note.is-1 .cv_note_line { left: calc(95 * var(--cv-u));  height: calc(28 * var(--cv-u)); }  .cv_note.is-1 .cv_note_dot { left: calc(90 * var(--cv-u));  top: calc(36 * var(--cv-u)); }  .cv_note.is-1 .cv_note_tag { left: calc(95 * var(--cv-u)); }
+.cv_note.is-2 .cv_note_line { left: calc(248 * var(--cv-u)); height: calc(11 * var(--cv-u)); }  .cv_note.is-2 .cv_note_dot { left: calc(243 * var(--cv-u)); top: calc(19 * var(--cv-u)); }  .cv_note.is-2 .cv_note_tag { left: calc(248 * var(--cv-u)); }
+.cv_note.is-3 .cv_note_line { left: calc(320 * var(--cv-u)); height: calc(17 * var(--cv-u)); }  .cv_note.is-3 .cv_note_dot { left: calc(315 * var(--cv-u)); top: calc(25 * var(--cv-u)); }  .cv_note.is-3 .cv_note_tag { left: calc(320 * var(--cv-u)); }
 /* status-row accent: tab 1 = sensor, pump, oxygen colours · tab 2 = Mist (people) */
-.cv--enter .cv-row.cv-1 { --row-c: var(--mist-600); }
-.cv--enter .cv-row.cv-2 { --row-c: var(--mauve-600); }
-.cv--enter .cv-row.cv-3 { --row-c: var(--slate-200); }
-.cv--morph .cv-row { --row-c: var(--mist-dot); }
+.cv_visual.is-live .cv_row.is-1 { --row-c: var(--mist-600); }
+.cv_visual.is-live .cv_row.is-2 { --row-c: var(--mauve-600); }
+.cv_visual.is-live .cv_row.is-3 { --row-c: var(--slate-200); }
+.cv_visual.is-context .cv_row { --row-c: var(--mist-dot); }
 /* KPI numbers: typed as plain digits (3400, not 3,400) so CSS can count them */
-.cv-count { position: relative; display: inline-block; }
+.cv_count { position: relative; display: inline-block; }
 
 /* ################################ PART 2 · MOTION ################################ */
 /* ============================================================
    Animation — the handoff part
-   Timeline lives on .cv; every piece reads its own start from it.
+   Timeline lives on .cv_visual; every piece reads its own start from it.
    --k is a speed factor (1 = real speed) for review only.
    ============================================================ */
-.cv {
+.cv_visual {
   --k: 1;
   --ease: cubic-bezier(.2, .7, .2, 1);
   --ease-in-out-cubic: cubic-bezier(.65, 0, .35, 1);
@@ -257,35 +258,35 @@
 @keyframes cv-pop-glyph { 0% { opacity: 0; transform: scale(0); text-shadow: 0 0 calc(10 * var(--cv-u)) var(--glyph-glow, var(--glow-mauve)); }
                       50% { opacity: 1; } 100% { transform: scale(1); text-shadow: 0 0 0 transparent; } }
 
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-tile      { animation: cv-scale calc(.5s * var(--k)) var(--ease-in-out-cubic) backwards;
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_tile      { animation: cv-scale calc(.5s * var(--k)) var(--ease-in-out-cubic) backwards;
                            animation-delay: calc(var(--t-tiles) + var(--i) * var(--stagger)); will-change: transform; }
 /* connector = one pen: stems (ease-in) → arms (linear) → drop (ease-out) ≈ in-out-cubic overall */
-.cv-seg { stroke-dasharray: 1; }
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-seg       { animation: cv-draw var(--dur) var(--seg-ease) backwards; animation-delay: var(--at); will-change: transform; }
-.cv-seg-stem { --at: var(--t-connector);                          --dur: calc(.16s * var(--k)); --seg-ease: cubic-bezier(.55, 0, 1, .45); }
-.cv-seg-arm  { --at: calc(var(--t-connector) + .16s * var(--k));  --dur: calc(.26s * var(--k)); --seg-ease: linear; }
-.cv-seg-drop { --at: calc(var(--t-connector) + .42s * var(--k));  --dur: calc(.16s * var(--k)); --seg-ease: cubic-bezier(0, .55, .45, 1); }
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-card      { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
+.cv_seg { stroke-dasharray: 1; }
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_seg       { animation: cv-draw var(--dur) var(--seg-ease) backwards; animation-delay: var(--at); will-change: transform; }
+.cv_seg_stem { --at: var(--t-connector);                          --dur: calc(.16s * var(--k)); --seg-ease: cubic-bezier(.55, 0, 1, .45); }
+.cv_seg_arm  { --at: calc(var(--t-connector) + .16s * var(--k));  --dur: calc(.26s * var(--k)); --seg-ease: linear; }
+.cv_seg_drop { --at: calc(var(--t-connector) + .42s * var(--k));  --dur: calc(.16s * var(--k)); --seg-ease: cubic-bezier(0, .55, .45, 1); }
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_card      { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: var(--t-card); will-change: transform; }
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-head      { animation: cv-fade calc(.4s * var(--k)) ease-out backwards;
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_head      { animation: cv-fade calc(.4s * var(--k)) ease-out backwards;
                            animation-delay: var(--t-head); will-change: transform; }
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-grid,
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-ticks     { animation: cv-fade calc(.4s * var(--k)) ease-out backwards;
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_grid,
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_ticks     { animation: cv-fade calc(.4s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-head) + var(--stagger)); will-change: transform; }
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-line      { animation: cv-wipe-right var(--draw) linear backwards;
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_line      { animation: cv-wipe-right var(--draw) linear backwards;
                            animation-delay: var(--draw-start); will-change: transform; }
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-dot       { animation: cv-pop calc(.5s * var(--k)) var(--ease-spring) backwards;
+:is([data-cv="tabs"]:not([data-cv-prev="2"]) .is-active .cv_visual.is-live, [data-cv="tabs"]:not([data-cv-prev="1"]) .is-active .cv_visual.is-context) .cv_dot       { animation: cv-pop calc(.5s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--draw-start) + var(--at) * var(--draw)); will-change: transform; }
-.is-active .cv-context   { animation: cv-fade calc(.6s * var(--k)) ease-out backwards;
+.is-active .cv_context   { animation: cv-fade calc(.6s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--settle) - .2s * var(--k)); will-change: transform; }
-.is-active .cv-row       { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_row       { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--settle) + var(--i) * var(--tail-stagger)); will-change: transform; }
-.is-active .cv-pill      { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(1s * var(--k)) ease-out;
+.is-active .cv_pill      { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(1s * var(--k)) ease-out;
                            animation-delay: calc(var(--settle) + var(--i) * var(--tail-stagger) + .15s * var(--k)),
                                             calc(var(--settle) + var(--i) * var(--tail-stagger) + .3s * var(--k)); will-change: transform; }
 
 /* ---------- tab 2: "morph" — card is already there, only the human layer arrives ---------- */
-.cv--morph {
+.cv_visual.is-context {
   --t-swap:     0s;
   --t-notes:    calc(.35s * var(--k));
   --note-gap:   calc(.30s * var(--k));
@@ -293,39 +294,39 @@
 }
 /* tab 2 reached from anywhere but tab 1 (or first view): no card to morph from, so play the
    full tab-1 entrance, and let each note arrive when the pen reaches its dot */
-[data-tabs]:not([data-prev-tab="1"]) .cv--morph {
+[data-cv="tabs"]:not([data-cv-prev="1"]) .cv_visual.is-context {
   --settle: calc(var(--draw-start) + var(--draw) + .15s * var(--k));
 }
-[data-tabs]:not([data-prev-tab="1"]) .cv--morph .cv-note {
+[data-cv="tabs"]:not([data-cv-prev="1"]) .cv_visual.is-context .cv_note {
   --t: calc(var(--draw-start) + var(--at) * var(--draw));
 }
 @keyframes cv-swap { from { opacity: 0; filter: blur(calc(6 * var(--cv-u))); } }
 
-.is-active .cv-swap      { animation: cv-swap calc(.5s * var(--k)) ease-out backwards;
+.is-active .cv_swap      { animation: cv-swap calc(.5s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-swap) + var(--i) * var(--stagger)); will-change: transform; }
 /* each note: tag pops → dashed line drops → dot turns Mist */
-.cv-note { --t: calc(var(--t-notes) + var(--note-i) * var(--note-gap)); }
-.is-active .cv-note-tag  { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards;
+.cv_note { --t: calc(var(--t-notes) + var(--note-i) * var(--note-gap)); }
+.is-active .cv_note_tag  { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: var(--t); will-change: transform; }
-.is-active .cv-note-line { animation: cv-wipe-down calc(.25s * var(--k)) var(--ease-in-out-cubic) backwards;
+.is-active .cv_note_line { animation: cv-wipe-down calc(.25s * var(--k)) var(--ease-in-out-cubic) backwards;
                            animation-delay: calc(var(--t) + .12s * var(--k)); will-change: transform; }
-.is-active .cv-note-dot  { animation: cv-pop calc(.5s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_note_dot  { animation: cv-pop calc(.5s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--t) + .3s * var(--k)); will-change: transform; }
 
 /* ---------- tab 1 reached from tab 2: the reverse morph — card stays, the notes blur out,
    tiles + title swap back, rows re-slide. Tab 1 carries tab 2's notes (hidden) just for this. ---------- */
-.cv--enter .cv-note { opacity: 0; }
-.is-active .cv--enter .cv-note > * { animation: none; }          /* never pop in on tab 1 */
-[data-tabs][data-prev-tab="2"] .cv--enter { --settle: calc(.45s * var(--k)); }
-[data-tabs][data-prev-tab="2"] .is-active .cv--enter .cv-note { animation: cv-note-out calc(.35s * var(--k)) ease-in backwards;
+.cv_visual.is-live .cv_note { opacity: 0; }
+.is-active .cv_visual.is-live .cv_note > * { animation: none; }          /* never pop in on tab 1 */
+[data-cv="tabs"][data-cv-prev="2"] .cv_visual.is-live { --settle: calc(.45s * var(--k)); }
+[data-cv="tabs"][data-cv-prev="2"] .is-active .cv_visual.is-live .cv_note { animation: cv-note-out calc(.35s * var(--k)) ease-in backwards;
                            animation-delay: calc((2 - var(--note-i)) * .06s * var(--k)); will-change: transform; }
-[data-tabs][data-prev-tab="2"] .is-active .cv--enter .cv-tile > div,
-[data-tabs][data-prev-tab="2"] .is-active .cv--enter .cv-head { animation: cv-swap calc(.5s * var(--k)) ease-out backwards;
+[data-cv="tabs"][data-cv-prev="2"] .is-active .cv_visual.is-live .cv_tile > div,
+[data-cv="tabs"][data-cv-prev="2"] .is-active .cv_visual.is-live .cv_head { animation: cv-swap calc(.5s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--i, 3) * var(--stagger)); will-change: transform; }
 @keyframes cv-note-out { from { opacity: 1; filter: none; } to { opacity: 0; filter: blur(calc(6 * var(--cv-u))); } }
 
 /* ---------- tab 3: agent fires — history is there, a new firing pushes in on top ---------- */
-.cv--agent {
+.cv_visual.is-agent-log {
   --t-card:   0s;
   --t-head:   calc(.20s * var(--k));
   --t-kpis:   calc(.35s * var(--k));
@@ -343,51 +344,51 @@
 @keyframes cv-ping  { 0% { box-shadow: 0 0 0 0 rgb(40 80 69 / .5); } 100% { box-shadow: 0 0 0 calc(6 * var(--cv-u)) rgb(40 80 69 / 0); } }
 
 /* count-up: the real number stays in the HTML (editable, SEO, no-JS fallback). clarify-tabs.js
-   copies it to --to and adds .cv-ready; then the text goes transparent and a CSS counter draws
+   copies it to --to and adds .is-cv-ready; then the text goes transparent and a CSS counter draws
    on top, right-aligned, so the unit never slides. */
-.cv-count { --n: var(--to); }
-.cv-ready .cv-count { visibility: hidden; counter-reset: n var(--n); }   /* the typed number keeps its width but hides (checkers skip it); the counter shows */
-.cv-ready .cv-count::after { content: counter(n); position: absolute; top: 0; right: 0; color: var(--count-c, var(--text-primary)); visibility: visible; }
-/* decimals (e.g. 7.6, 1.47): the script counts in tenths / hundredths and adds .cv-dec1 / .cv-dec2;
+.cv_count { --n: var(--to); }
+.is-cv-ready .cv_count { visibility: hidden; counter-reset: n var(--n); }   /* the typed number keeps its width but hides (checkers skip it); the counter shows */
+.is-cv-ready .cv_count::after { content: counter(n); position: absolute; top: 0; right: 0; color: var(--count-c, var(--text-primary)); visibility: visible; }
+/* decimals (e.is-grid. 7.6, 1.47): the script counts in tenths / hundredths and adds .is-dec1 / .is-dec2;
    the counter is split into whole part + fraction around a "." */
-.cv-ready .cv-count.cv-dec1 { counter-reset: i round(down, calc(var(--n) / 10), 1) f mod(var(--n), 10); }
-.cv-ready .cv-count.cv-dec2 { counter-reset: i round(down, calc(var(--n) / 100), 1) f mod(var(--n), 100); }
-.cv-ready .cv-count.cv-dec1::after { content: counter(i) "." counter(f); }
-.cv-ready .cv-count.cv-dec2::after { content: counter(i) "." counter(f, decimal-leading-zero); }
-.cv-flip { display: inline-grid; }
-.cv-flip > * { grid-area: 1 / 1; }
-.cv-flip-old { opacity: 0; }
+.is-cv-ready .cv_count.is-dec1 { counter-reset: i round(down, calc(var(--n) / 10), 1) f mod(var(--n), 10); }
+.is-cv-ready .cv_count.is-dec2 { counter-reset: i round(down, calc(var(--n) / 100), 1) f mod(var(--n), 100); }
+.is-cv-ready .cv_count.is-dec1::after { content: counter(i) "." counter(f); }
+.is-cv-ready .cv_count.is-dec2::after { content: counter(i) "." counter(f, decimal-leading-zero); }
+.cv_flip { display: inline-grid; }
+.cv_flip > * { grid-area: 1 / 1; }
+.cv_flip_old { opacity: 0; }
 
-.is-active .cv--agent .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_visual.is-agent-log .cv_card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
                                  animation-delay: var(--t-card); will-change: transform; }
-.is-active .cv-ahead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
-.is-active .cv-live      { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_ahead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
+.is-active .cv_live      { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--t-head) + .15s * var(--k)); will-change: transform; }
-.is-active .cv-live i    { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); will-change: transform; }
-.is-active .cv-kpi       { animation: cv-rise calc(.6s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_live i    { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); will-change: transform; }
+.is-active .cv_kpi       { animation: cv-rise calc(.6s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--t-kpis) + var(--i) * var(--stagger)); will-change: transform; }
-.is-active .cv-count     { animation: cv-count calc(.9s * var(--k)) cubic-bezier(.25, 1, .5, 1) backwards;
+.is-active .cv_count     { animation: cv-count calc(.9s * var(--k)) cubic-bezier(.25, 1, .5, 1) backwards;
                            animation-delay: calc(var(--t-kpis) + var(--i) * var(--stagger)); will-change: transform; }
-.is-active .cv-flip-old  { animation: cv-out calc(.3s * var(--k)) ease-in backwards; animation-delay: var(--t-fire); will-change: transform; }
-.is-active .cv-flip-new  { animation: cv-swap calc(.4s * var(--k)) ease-out backwards;
+.is-active .cv_flip_old  { animation: cv-out calc(.3s * var(--k)) ease-in backwards; animation-delay: var(--t-fire); will-change: transform; }
+.is-active .cv_flip_new  { animation: cv-swap calc(.4s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-fire) + .15s * var(--k)); will-change: transform; }
-.is-active .cv-cols      { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-table); will-change: transform; }
-.is-active .cv-history .cv-trow { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_cols      { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-table); will-change: transform; }
+.is-active .cv_history .cv_trow { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--t-table) + .1s * var(--k) + var(--i) * var(--tail-stagger)); will-change: transform; }
-.is-active .cv-history   { animation: cv-push calc(.7s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-fire); will-change: transform; }
-.is-active .cv-trow--new { animation: cv-fade calc(.6s * var(--k)) ease-out backwards, cv-rowtint calc(1s * var(--k)) ease-out;
+.is-active .cv_history   { animation: cv-push calc(.7s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-fire); will-change: transform; }
+.is-active .cv_trow.is-new { animation: cv-fade calc(.6s * var(--k)) ease-out backwards, cv-rowtint calc(1s * var(--k)) ease-out;
                            animation-delay: calc(var(--t-fire) + .1s * var(--k)), calc(var(--t-match) + 4 * var(--match-gap)); will-change: transform; }
-.is-active .cv-trow--new .cv-chip { animation: cv-match calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(.9s * var(--k)) ease-out;
+.is-active .cv_trow.is-new .cv_chip { animation: cv-match calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(.9s * var(--k)) ease-out;
                            animation-delay: calc(var(--t-match) + var(--i) * var(--match-gap)), calc(var(--t-match) + var(--i) * var(--match-gap) + .1s * var(--k)); will-change: transform; }
-.is-active .cv-trow--new .cv-lead { display: inline-block; animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_trow.is-new .cv_lead { display: inline-block; animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--t-match) + 4 * var(--match-gap) + .05s * var(--k)); will-change: transform; }
-.is-active .cv-trow--new .cv-status { animation: cv-swap calc(.4s * var(--k)) ease-out backwards;
+.is-active .cv_trow.is-new .cv_status { animation: cv-swap calc(.4s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-match) + 4 * var(--match-gap) + .1s * var(--k)); will-change: transform; }
-.is-active .cv-foot      { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
+.is-active .cv_foot      { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-table) + .5s * var(--k)); will-change: transform; }
 
 /* ---------- tab 4: the firing arrives, then fans out to every destination ---------- */
-.cv--route {
+.cv_visual.is-routing {
   --t-event:   0s;
   --t-link:    calc(.45s * var(--k));
   --t-card:    calc(.65s * var(--k));
@@ -398,70 +399,70 @@
 @keyframes cv-tog-bg { from { background-color: rgb(249 250 252 / .12); } }
 @keyframes cv-tog-kb { from { transform: translateX(calc(-12 * var(--cv-u))); background-color: var(--muted-2); } }
 
-.is-active .cv-event     { animation: cv-scale calc(.5s * var(--k)) var(--ease-in-out-cubic) backwards; animation-delay: var(--t-event); will-change: transform; }
-.is-active .cv-event .ai { display: inline-block; animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_event     { animation: cv-scale calc(.5s * var(--k)) var(--ease-in-out-cubic) backwards; animation-delay: var(--t-event); will-change: transform; }
+.is-active .cv_event .cv_ai_mark { display: inline-block; animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--t-event) + .25s * var(--k)); will-change: transform; }
-.is-active .cv-rconn path.cv-seg { animation: cv-draw calc(.3s * var(--k)) var(--ease-in-out-cubic) backwards;
+.is-active .cv_rconn path.cv_seg { animation: cv-draw calc(.3s * var(--k)) var(--ease-in-out-cubic) backwards;
                            animation-delay: var(--t-link); will-change: transform; }
-.is-active .cv--route .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_visual.is-routing .cv_card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: var(--t-card); will-change: transform; }
-.is-active .cv-rhead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
+.is-active .cv_rhead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-card) + .15s * var(--k)); will-change: transform; }
-.is-active .cv-dest      { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_dest      { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--t-dests) + var(--i) * var(--stagger)); will-change: transform; }
-.is-active .cv-toggle    { animation: cv-tog-bg calc(.3s * var(--k)) ease-out backwards, cv-bloom calc(.9s * var(--k)) ease-out;
+.is-active .cv_toggle    { animation: cv-tog-bg calc(.3s * var(--k)) ease-out backwards, cv-bloom calc(.9s * var(--k)) ease-out;
                            animation-delay: calc(var(--t-switch) + var(--i) * var(--switch-gap)), calc(var(--t-switch) + var(--i) * var(--switch-gap) + .2s * var(--k)); will-change: transform; }
-.is-active .cv-toggle::after { animation: cv-tog-kb calc(.45s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_toggle::after { animation: cv-tog-kb calc(.45s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--t-switch) + var(--i) * var(--switch-gap)); will-change: transform; }
-.is-active .cv-add       { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
+.is-active .cv_add       { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-switch) + 6 * var(--switch-gap) + .1s * var(--k)); will-change: transform; }
 
 /* ################################ HOW IT WORKS ################################ */
 /* ============================================================
    Capture · "Live tail" (434×322) — signals stream in, newest on top
    ============================================================ */
-.cv--tail { width: calc(434 * var(--cv-u)); }
-.cv--tail .cv-card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
-.cv--tail .cv-card > .inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(16 * var(--cv-u)); }
-.cv-thead { display: flex; justify-content: space-between; align-items: center; }
-.cv-bigkpi { display: flex; align-items: baseline; gap: calc(6 * var(--cv-u)); }
-.cv-bigkpi .num { font-family: var(--font-mono); font-size: calc(28 * var(--cv-u)); line-height: calc(32 * var(--cv-u)); font-weight: 500; position: relative; }
-.cv-bigkpi .unit { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); color: var(--muted-2); }
-.cv-stream { display: flex; align-items: center; gap: calc(6 * var(--cv-u)); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); font-weight: 500; color: var(--sage-600); }
-.cv-stream i { position: relative; width: calc(12 * var(--cv-u)); height: calc(12 * var(--cv-u)); border-radius: 50%; border: 1px solid rgb(162 208 193 / .4); }
-.cv-stream i::after { content: ""; position: absolute; inset: calc(2 * var(--cv-u)); border-radius: 50%; background: var(--sage-600); }
-.cv-tail { display: flex; flex-direction: column; }
-.cv-tline { height: calc(37 * var(--cv-u)); display: grid; grid-template-columns: calc(53 * var(--cv-u)) calc(84 * var(--cv-u)) 1fr auto; column-gap: calc(12 * var(--cv-u)); align-items: center;
+.cv_visual.is-capture { width: calc(434 * var(--cv-u)); }
+.cv_visual.is-capture .cv_card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
+.cv_visual.is-capture .cv_card > .cv_inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(16 * var(--cv-u)); }
+.cv_thead { display: flex; justify-content: space-between; align-items: center; }
+.cv_bigkpi { display: flex; align-items: baseline; gap: calc(6 * var(--cv-u)); }
+.cv_bigkpi .cv_num { font-family: var(--font-mono); font-size: calc(28 * var(--cv-u)); line-height: calc(32 * var(--cv-u)); font-weight: 500; position: relative; }
+.cv_bigkpi .cv_unit { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); color: var(--muted-2); }
+.cv_stream { display: flex; align-items: center; gap: calc(6 * var(--cv-u)); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); font-weight: 500; color: var(--sage-600); }
+.cv_stream i { position: relative; width: calc(12 * var(--cv-u)); height: calc(12 * var(--cv-u)); border-radius: 50%; border: 1px solid rgb(162 208 193 / .4); }
+.cv_stream i::after { content: ""; position: absolute; inset: calc(2 * var(--cv-u)); border-radius: 50%; background: var(--sage-600); }
+.cv_tail { display: flex; flex-direction: column; }
+.cv_tline { height: calc(37 * var(--cv-u)); display: grid; grid-template-columns: calc(53 * var(--cv-u)) calc(84 * var(--cv-u)) 1fr auto; column-gap: calc(12 * var(--cv-u)); align-items: center;
   border-top: 1px solid var(--glass-line); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); }
-.cv-tline .time { font-family: var(--font-mono); font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--muted-2); }
-.cv-proto { justify-self: start; padding: calc(2 * var(--cv-u)) calc(6 * var(--cv-u)); border-radius: calc(4 * var(--cv-u)); background: rgb(249 250 252 / .08);
+.cv_tline .cv_time { font-family: var(--font-mono); font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--muted-2); }
+.cv_proto { justify-self: start; padding: calc(2 * var(--cv-u)) calc(6 * var(--cv-u)); border-radius: calc(4 * var(--cv-u)); background: rgb(249 250 252 / .08);
   font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); white-space: nowrap; }
-.cv-tline .val { display: flex; gap: calc(3 * var(--cv-u)); justify-content: flex-end; }
-.cv-tline .val .u { color: var(--muted-2); }
+.cv_tline .cv_reading { display: flex; gap: calc(3 * var(--cv-u)); justify-content: flex-end; }
+.cv_tline .cv_reading .cv_unit_sm { color: var(--muted-2); }
 /* older lines fade out (Figma opacities) */
-.cv-tline.cv-2 { opacity: .85; } .cv-tline.cv-3 { opacity: .7; } .cv-tline.cv-4 { opacity: .55; }
-.cv-tline.cv-5 { opacity: .42; } .cv-tline.cv-6 { opacity: .3; }
+.cv_tline.is-2 { opacity: .85; } .cv_tline.is-3 { opacity: .7; } .cv_tline.is-4 { opacity: .55; }
+.cv_tline.is-5 { opacity: .42; } .cv_tline.is-6 { opacity: .3; }
 
 /* ---------- Capture motion: each new line lands on top, pushes the others down one step and dims them ---------- */
-.cv--tail {
+.cv_visual.is-capture {
   --t-card:  0s;
   --t-head:  calc(.20s * var(--k));
   --t-rows:  calc(.55s * var(--k));     /* lines start streaming in */
   --tail:    calc(1.44s * var(--k));    /* 6 lines, .24s apart */
 }
-.is-active .cv--tail .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
-.is-active .cv-thead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
-.is-active .cv-stream i::after { animation: cv-beat 1.2s ease-in-out infinite; will-change: transform; }
-.is-active .cv-stream i  { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_visual.is-capture .cv_card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
+.is-active .cv_thead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
+.is-active .cv_stream i::after { animation: cv-beat 1.2s ease-in-out infinite; will-change: transform; }
+.is-active .cv_stream i  { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: var(--t-rows); will-change: transform; }
 /* the signal count ticks up while lines arrive (start value: data-from on the number) */
-.is-active .cv--tail .cv-count { animation: cv-count var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
-.is-active .cv-tail      { animation: cv-tail-push var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
-.is-active .cv-tline.cv-1 { animation: cv-tail-1 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
-.is-active .cv-tline.cv-2 { animation: cv-tail-2 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
-.is-active .cv-tline.cv-3 { animation: cv-tail-3 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
-.is-active .cv-tline.cv-4 { animation: cv-tail-4 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
-.is-active .cv-tline.cv-5 { animation: cv-tail-5 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
-.is-active .cv-tline.cv-6 { animation: cv-tail-6 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_visual.is-capture .cv_count { animation: cv-count var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_tail      { animation: cv-tail-push var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_tline.is-1 { animation: cv-tail-1 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_tline.is-2 { animation: cv-tail-2 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_tline.is-3 { animation: cv-tail-3 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_tline.is-4 { animation: cv-tail-4 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_tline.is-5 { animation: cv-tail-5 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv_tline.is-6 { animation: cv-tail-6 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
 
 @keyframes cv-beat { 50% { transform: scale(.7); } }
 @keyframes cv-ping-sage { 0% { box-shadow: 0 0 0 0 rgb(162 208 193 / .45); } 100% { box-shadow: 0 0 0 calc(6 * var(--cv-u)) rgb(162 208 193 / 0); } }
@@ -547,46 +548,46 @@
 /* ============================================================
    Transform · "Stress event" (434×387) — an expression, evaluated live against every pen
    ============================================================ */
-.cv--expr { width: calc(434 * var(--cv-u)); }
-.cv--expr .cv-card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
-.cv--expr .cv-card > .inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(16 * var(--cv-u)); }
-.cv-ehead { display: flex; justify-content: space-between; align-items: flex-start; }
-.cv-ehead .title { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; margin-top: calc(4 * var(--cv-u)); }
-.cv-live--sm { font-size: calc(11 * var(--cv-u)); gap: calc(4 * var(--cv-u)); }
-.cv-code { background: rgb(249 250 252 / .04); border-radius: calc(8 * var(--cv-u)); padding: calc(16 * var(--cv-u)) calc(10 * var(--cv-u));
+.cv_visual.is-transform { width: calc(434 * var(--cv-u)); }
+.cv_visual.is-transform .cv_card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
+.cv_visual.is-transform .cv_card > .cv_inner { border-radius: calc(16 * var(--cv-u)); padding: calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(16 * var(--cv-u)); }
+.cv_ehead { display: flex; justify-content: space-between; align-items: flex-start; }
+.cv_ehead .cv_title { font-size: calc(15 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; margin-top: calc(4 * var(--cv-u)); }
+.cv_live.is-sm { font-size: calc(11 * var(--cv-u)); gap: calc(4 * var(--cv-u)); }
+.cv_code { background: rgb(249 250 252 / .04); border-radius: calc(8 * var(--cv-u)); padding: calc(16 * var(--cv-u)) calc(10 * var(--cv-u));
   font-family: var(--font-mono); font-size: calc(12 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); white-space: pre; }
-.cv-cline { display: block; padding: 0 calc(6 * var(--cv-u)); border-radius: calc(4 * var(--cv-u));
+.cv_cline { display: block; padding: 0 calc(6 * var(--cv-u)); border-radius: calc(4 * var(--cv-u));
   /* shimmer band, parked off to the right until the line is checked */
   background-image: linear-gradient(100deg, transparent 40%, rgb(218 183 214 / .32) 50%, transparent 60%);
   background-size: 300% 100%; background-position: 0 0; background-repeat: no-repeat; }
-.cv-tok { display: inline-block; }
-.cv-cline .kw { color: var(--mauve-300); }
-.cv-cline .f  { color: var(--muted-2); }
-.cv-match { display: flex; flex-direction: column; }
-.cv-match > .cv-eyebrow { padding-bottom: calc(8 * var(--cv-u)); }
-.cv-mrow { height: calc(37 * var(--cv-u)); display: grid; grid-template-columns: 1fr auto calc(72 * var(--cv-u)); column-gap: calc(8 * var(--cv-u)); align-items: center;
+.cv_tok { display: inline-block; }
+.cv_cline .cv_keyword { color: var(--mauve-300); }
+.cv_cline .cv_field  { color: var(--muted-2); }
+.cv_match { display: flex; flex-direction: column; }
+.cv_match > .cv_eyebrow { padding-bottom: calc(8 * var(--cv-u)); }
+.cv_mrow { height: calc(37 * var(--cv-u)); display: grid; grid-template-columns: 1fr auto calc(72 * var(--cv-u)); column-gap: calc(8 * var(--cv-u)); align-items: center;
   border-top: 1px solid var(--glass-line); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); }
-.cv-mrow.cv-1 { height: calc(40 * var(--cv-u)); }
-.cv-mrow.cv-2, .cv-mrow.cv-3 { opacity: .7; }
-.cv-mrow .asset { display: flex; gap: calc(4 * var(--cv-u)); }
-.cv-cond { display: flex; align-items: center; gap: calc(4 * var(--cv-u)); color: var(--muted-2); }
-.cv-cond .of { font-family: var(--font-mono); }
-.cv-mrow .cv-cond .cv-count { --count-c: var(--muted-2); }
-.cv-mrow.cv-1 .cv-cond .cv-count { --count-c: var(--text-primary); }
-html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* no-JS fallback */
-.cv-marks { display: flex; gap: calc(3 * var(--cv-u)); margin-right: calc(4 * var(--cv-u)); }
-.cv-mark { position: relative; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; box-shadow: inset 0 0 0 1px rgb(183 190 197 / .6); }
+.cv_mrow.is-1 { height: calc(40 * var(--cv-u)); }
+.cv_mrow.is-2, .cv_mrow.is-3 { opacity: .7; }
+.cv_mrow .cv_asset { display: flex; gap: calc(4 * var(--cv-u)); }
+.cv_cond { display: flex; align-items: center; gap: calc(4 * var(--cv-u)); color: var(--muted-2); }
+.cv_cond .cv_of { font-family: var(--font-mono); }
+.cv_mrow .cv_cond .cv_count { --count-c: var(--muted-2); }
+.cv_mrow.is-1 .cv_cond .cv_count { --count-c: var(--text-primary); }
+html:not(.is-cv-ready) .cv_mrow .cv_cond .cv_count { color: var(--count-c); }   /* no-JS fallback */
+.cv_marks { display: flex; gap: calc(3 * var(--cv-u)); margin-right: calc(4 * var(--cv-u)); }
+.cv_mark { position: relative; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; box-shadow: inset 0 0 0 1px rgb(183 190 197 / .6); }
 /* the fill is a layer on top of the open ring, so the ring stays visible until the condition is met */
-.cv-mark.met::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--mauve-300); }
-.cv-mrow .st { justify-self: end; }
-.cv-fired { display: inline-flex; align-items: center; gap: calc(4 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(10 * var(--cv-u));
+.cv_mark.is-met::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--mauve-300); }
+.cv_mrow .cv_state { justify-self: end; }
+.cv_fired { display: inline-flex; align-items: center; gap: calc(4 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(10 * var(--cv-u));
   background: var(--mauve-200); color: var(--mauve-ink); font-size: calc(11 * var(--cv-u)); line-height: 1; font-weight: 500; }
-.cv-fired::before { content: ""; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
-.cv-watch { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); letter-spacing: .08em; color: var(--muted-2); }
-.cv-efoot { padding-top: calc(12 * var(--cv-u)); border-top: 1px solid var(--glass-line); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: var(--muted-2); }
+.cv_fired::before { content: ""; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
+.cv_watch { font-family: var(--font-mono); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); letter-spacing: .08em; color: var(--muted-2); }
+.cv_efoot { padding-top: calc(12 * var(--cv-u)); border-top: 1px solid var(--glass-line); font-size: calc(10 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: var(--muted-2); }
 
 /* ---------- Transform motion: the expression is written, then checked line by line against each pen ---------- */
-.cv--expr {
+.cv_visual.is-transform {
   --t-card:  0s;
   --t-head:  calc(.20s * var(--k));
   --t-code:  calc(.45s * var(--k));     /* expression lines type in */
@@ -595,33 +596,33 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
   --t-eval:  calc(2.10s * var(--k));    /* condition 1 is checked; 2 and 3 follow */
   --eval-gap: calc(.30s * var(--k));
 }
-.cv-mrow.cv-1 { --met: 3; } .cv-mrow.cv-2 { --met: 2; } .cv-mrow.cv-3 { --met: 1; }
-.is-active .cv--expr .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
-.is-active .cv-ehead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
-.is-active .cv--expr .cv-live { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards; animation-delay: calc(var(--t-head) + .15s * var(--k)); will-change: transform; }
-.is-active .cv--expr .cv-live i { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); will-change: transform; }
-.is-active .cv-code      { animation: cv-fade calc(.4s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-code) - .1s * var(--k)); will-change: transform; }
+.cv_mrow.is-1 { --met: 3; } .cv_mrow.is-2 { --met: 2; } .cv_mrow.is-3 { --met: 1; }
+.is-active .cv_visual.is-transform .cv_card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
+.is-active .cv_ehead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
+.is-active .cv_visual.is-transform .cv_live { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards; animation-delay: calc(var(--t-head) + .15s * var(--k)); will-change: transform; }
+.is-active .cv_visual.is-transform .cv_live i { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); will-change: transform; }
+.is-active .cv_code      { animation: cv-fade calc(.4s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-code) - .1s * var(--k)); will-change: transform; }
 /* words float in (keyword → field → value), line by line */
-.cv-tok:nth-child(1) { --w: 0; } .cv-tok:nth-child(2) { --w: 1; } .cv-tok:nth-child(3) { --w: 2; }
-.is-active .cv-tok       { animation: cv-word calc(.55s * var(--k)) var(--ease-settle) backwards;
+.cv_tok:nth-child(1) { --w: 0; } .cv_tok:nth-child(2) { --w: 1; } .cv_tok:nth-child(3) { --w: 2; }
+.is-active .cv_tok       { animation: cv-word calc(.55s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--t-code) + var(--i) * var(--line-gap) + var(--w) * .07s * var(--k)); will-change: transform; }
 /* when a line is checked, a Mauve shimmer sweeps across it */
-.is-active .cv-cline     { animation: cv-shimmer calc(.7s * var(--k)) ease-in-out;
+.is-active .cv_cline     { animation: cv-shimmer calc(.7s * var(--k)) ease-in-out;
                            animation-delay: calc(var(--t-eval) + var(--i) * var(--eval-gap)); will-change: transform; }
-.is-active .cv-match > .cv-eyebrow { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-rows) - .1s * var(--k)); will-change: transform; }
-.is-active .cv-mrow      { animation: cv-slide-soft calc(.7s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_match > .cv_eyebrow { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-rows) - .1s * var(--k)); will-change: transform; }
+.is-active .cv_mrow      { animation: cv-slide-soft calc(.7s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--t-rows) + var(--i) * var(--stagger)); will-change: transform; }
 /* the row that fires gets a brief tint, so the eye lands on it */
-.is-active .cv-mrow.cv-1 { animation: cv-slide-soft calc(.7s * var(--k)) var(--ease-settle) backwards, cv-rowtint calc(1s * var(--k)) ease-out;
+.is-active .cv_mrow.is-1 { animation: cv-slide-soft calc(.7s * var(--k)) var(--ease-settle) backwards, cv-rowtint calc(1s * var(--k)) ease-out;
                            animation-delay: calc(var(--t-rows) + var(--i) * var(--stagger)), calc(var(--t-eval) + 2 * var(--eval-gap) + .2s * var(--k)); will-change: transform; }
 /* a condition mark springs full (with a glow) when its expression line is checked; "x of 3" ticks with it */
-.is-active .cv-mark.met::after { animation: cv-mark calc(.6s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_mark.is-met::after { animation: cv-mark calc(.6s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--t-eval) + var(--i) * var(--eval-gap)); will-change: transform; }
-.is-active .cv-mrow .cv-count { animation: cv-count calc(var(--met) * var(--eval-gap)) steps(var(--met), jump-start) backwards;
+.is-active .cv_mrow .cv_count { animation: cv-count calc(var(--met) * var(--eval-gap)) steps(var(--met), jump-start) backwards;
                            animation-delay: var(--t-eval); will-change: transform; }
-.is-active .cv-fired     { animation: cv-spring calc(.6s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(1.1s * var(--k)) ease-out;
+.is-active .cv_fired     { animation: cv-spring calc(.6s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(1.1s * var(--k)) ease-out;
                            animation-delay: calc(var(--t-eval) + 2 * var(--eval-gap) + .25s * var(--k)), calc(var(--t-eval) + 2 * var(--eval-gap) + .35s * var(--k)); will-change: transform; }
-.is-active .cv-efoot     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
+.is-active .cv_efoot     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-eval) + 3 * var(--eval-gap) + .3s * var(--k)); will-change: transform; }
 @keyframes cv-word     { from { opacity: 0; transform: translateY(calc(4 * var(--cv-u))); filter: blur(calc(6 * var(--cv-u))); } }
 @keyframes cv-slide-soft { from { opacity: 0; transform: translateX(calc(-10 * var(--cv-u))); filter: blur(calc(6 * var(--cv-u))); } }
@@ -638,52 +639,52 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 /* ============================================================
    Act · "Handled" (434×484) — the event plays out as a timeline, phases tick off as it goes
    ============================================================ */
-.cv--act { width: calc(434 * var(--cv-u)); }
-.cv--act .cv-card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
-.cv--act .cv-card > .inner { border-radius: calc(16 * var(--cv-u)); padding: calc(24 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(24 * var(--cv-u)); }
-.cv-acthead { display: flex; flex-direction: column; gap: calc(12 * var(--cv-u)); }
-.cv-acthead .row { display: flex; justify-content: space-between; align-items: baseline; }
-.cv-acthead .title { font-size: calc(16 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; display: flex; gap: calc(6 * var(--cv-u)); }
-.cv-acthead .title .mono { font-weight: 500; }
-.cv-took { font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); display: flex; gap: calc(4 * var(--cv-u)); }
-.cv-took .mono { color: var(--text-primary); font-weight: 500; }
-.cv-phases { display: flex; align-items: center; gap: calc(8 * var(--cv-u)); }
-.cv-phase { display: inline-flex; align-items: center; gap: calc(6 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(10 * var(--cv-u)) calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(12 * var(--cv-u));
+.cv_visual.is-act { width: calc(434 * var(--cv-u)); }
+.cv_visual.is-act .cv_card { border-radius: calc(20 * var(--cv-u)); padding: calc(4 * var(--cv-u)); }
+.cv_visual.is-act .cv_card > .cv_inner { border-radius: calc(16 * var(--cv-u)); padding: calc(24 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(24 * var(--cv-u)); }
+.cv_acthead { display: flex; flex-direction: column; gap: calc(12 * var(--cv-u)); }
+.cv_acthead .cv_hrow { display: flex; justify-content: space-between; align-items: baseline; }
+.cv_acthead .cv_title { font-size: calc(16 * var(--cv-u)); line-height: calc(20 * var(--cv-u)); font-weight: 600; display: flex; gap: calc(6 * var(--cv-u)); }
+.cv_acthead .cv_title .cv_mono { font-weight: 500; }
+.cv_took { font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); display: flex; gap: calc(4 * var(--cv-u)); }
+.cv_took .cv_mono { color: var(--text-primary); font-weight: 500; }
+.cv_phases { display: flex; align-items: center; gap: calc(8 * var(--cv-u)); }
+.cv_phase { display: inline-flex; align-items: center; gap: calc(6 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(10 * var(--cv-u)) calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(12 * var(--cv-u));
   background: rgb(249 250 252 / .06); font-size: calc(12 * var(--cv-u)); line-height: 1; font-weight: 500; }
-.cv-phase .ck { display: inline-block; color: var(--sage-600); font-size: calc(11 * var(--cv-u)); }
-.cv-sep { width: calc(16 * var(--cv-u)); height: 1px; background: rgb(139 139 139 / .45); }
-.cv-events { display: flex; flex-direction: column; }
-.cv-ev { display: grid; grid-template-columns: calc(24 * var(--cv-u)) 1fr; column-gap: calc(14 * var(--cv-u)); }
-.cv-ev .rail { display: flex; flex-direction: column; align-items: center; }
-.cv-node { flex: none; width: calc(24 * var(--cv-u)); height: calc(24 * var(--cv-u)); border-radius: 50%; display: grid; place-items: center; }
-.cv-node.agent  { background: var(--mauve-200); color: var(--mauve-ink); font-size: calc(12 * var(--cv-u)); font-weight: 600; --glow: var(--glow-mauve); }
-.cv-node.person { background: rgb(249 250 252 / .12); font: 500 calc(9 * var(--cv-u))/1 var(--font-mono); --glow: var(--glow-mist); }
-.cv-node.ok     { background: var(--sage-300); color: var(--sage-900); font-size: calc(12 * var(--cv-u)); font-weight: 600; --glow: var(--glow-sage); }
-.cv-ev .line { position: relative; flex: 1; width: 1px; background: rgb(139 139 139 / .35); }
+.cv_phase .cv_check { display: inline-block; color: var(--sage-600); font-size: calc(11 * var(--cv-u)); }
+.cv_sep { width: calc(16 * var(--cv-u)); height: 1px; background: rgb(139 139 139 / .45); }
+.cv_events { display: flex; flex-direction: column; }
+.cv_ev { display: grid; grid-template-columns: calc(24 * var(--cv-u)) 1fr; column-gap: calc(14 * var(--cv-u)); }
+.cv_ev .cv_rail { display: flex; flex-direction: column; align-items: center; }
+.cv_node { flex: none; width: calc(24 * var(--cv-u)); height: calc(24 * var(--cv-u)); border-radius: 50%; display: grid; place-items: center; }
+.cv_node.is-agent  { background: var(--mauve-200); color: var(--mauve-ink); font-size: calc(12 * var(--cv-u)); font-weight: 600; --glow: var(--glow-mauve); }
+.cv_node.is-person { background: rgb(249 250 252 / .12); font: 500 calc(9 * var(--cv-u))/1 var(--font-mono); --glow: var(--glow-mist); }
+.cv_node.is-ok     { background: var(--sage-300); color: var(--sage-900); font-size: calc(12 * var(--cv-u)); font-weight: 600; --glow: var(--glow-sage); }
+.cv_ev .cv_rail_line { position: relative; flex: 1; width: 1px; background: rgb(139 139 139 / .35); }
 /* the progress stroke: fills the rail downward from this step to the next, blending into the next step's colour */
-.cv-ev .line::after { content: ""; position: absolute; left: -.5px; top: 0; width: calc(2 * var(--cv-u)); height: 100%; border-radius: 1px;
+.cv_ev .cv_rail_line::after { content: ""; position: absolute; left: -.5px; top: 0; width: calc(2 * var(--cv-u)); height: 100%; border-radius: 1px;
   background: linear-gradient(var(--c), var(--c-next)); box-shadow: 0 0 calc(6 * var(--cv-u)) color-mix(in srgb, var(--c-next) 55%, transparent);
   transform-origin: top; }
 /* its glowing tip, which travels down with the fill and fades on arrival */
-.cv-ev .line::before { content: ""; position: absolute; z-index: 1; left: calc(-2 * var(--cv-u)); top: 100%; width: calc(5 * var(--cv-u)); height: calc(5 * var(--cv-u)); margin-top: calc(-2.5 * var(--cv-u));
+.cv_ev .cv_rail_line::before { content: ""; position: absolute; z-index: 1; left: calc(-2 * var(--cv-u)); top: 100%; width: calc(5 * var(--cv-u)); height: calc(5 * var(--cv-u)); margin-top: calc(-2.5 * var(--cv-u));
   border-radius: 50%; background: var(--c-next); box-shadow: 0 0 calc(8 * var(--cv-u)) calc(2 * var(--cv-u)) color-mix(in srgb, var(--c-next) 70%, transparent); opacity: 0; }
-.cv-ev.k-agent  { --c: var(--mauve-300); } .cv-ev.k-person { --c: var(--mist-dot); } .cv-ev.k-ok { --c: var(--sage-600); }
-.cv-ev.n-agent  { --c-next: var(--mauve-300); } .cv-ev.n-person { --c-next: var(--mist-dot); } .cv-ev.n-ok { --c-next: var(--sage-600); }
-.cv-ev .content { padding: calc(3 * var(--cv-u)) 0 calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(4 * var(--cv-u)); }
-.cv-ev:last-child .content { padding-bottom: 0; }
-.cv-ev .head { display: flex; justify-content: space-between; align-items: center; gap: calc(8 * var(--cv-u)); }
-.cv-ev .head .t { font-size: calc(13 * var(--cv-u)); line-height: calc(18 * var(--cv-u)); font-weight: 500; }
-.cv-ev .head .time { font-family: var(--font-mono); font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--muted-2); }
-.cv-ev .body { display: flex; align-items: center; gap: calc(8 * var(--cv-u)); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); }
-.cv-badge { display: inline-flex; align-items: center; gap: calc(4 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(10 * var(--cv-u));
+.cv_ev.is-agent  { --c: var(--mauve-300); } .cv_ev.is-person { --c: var(--mist-dot); } .cv_ev.is-ok { --c: var(--sage-600); }
+.cv_ev.is-next-agent  { --c-next: var(--mauve-300); } .cv_ev.is-next-person { --c-next: var(--mist-dot); } .cv_ev.is-next-ok { --c-next: var(--sage-600); }
+.cv_ev .cv_content { padding: calc(3 * var(--cv-u)) 0 calc(20 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(4 * var(--cv-u)); }
+.cv_ev:last-child .cv_content { padding-bottom: 0; }
+.cv_ev .cv_ev_head { display: flex; justify-content: space-between; align-items: center; gap: calc(8 * var(--cv-u)); }
+.cv_ev .cv_ev_head .cv_name { font-size: calc(13 * var(--cv-u)); line-height: calc(18 * var(--cv-u)); font-weight: 500; }
+.cv_ev .cv_ev_head .cv_time { font-family: var(--font-mono); font-size: calc(11 * var(--cv-u)); line-height: calc(14 * var(--cv-u)); color: var(--muted-2); }
+.cv_ev .cv_body { display: flex; align-items: center; gap: calc(8 * var(--cv-u)); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); }
+.cv_badge { display: inline-flex; align-items: center; gap: calc(4 * var(--cv-u)); padding: calc(4 * var(--cv-u)) calc(8 * var(--cv-u)); border-radius: calc(10 * var(--cv-u));
   font-size: calc(11 * var(--cv-u)); line-height: 1; font-weight: 500; }
-.cv-badge::before { content: ""; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
-.cv-badge.agent { background: var(--mauve-200); color: var(--mauve-ink); --glow: var(--glow-mauve); }
-.cv-badge.ok    { background: var(--sage-300); color: var(--sage-900); --glow: var(--glow-sage); }
-.cv-actfoot { padding-top: calc(16 * var(--cv-u)); border-top: 1px solid var(--glass-line); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); }
+.cv_badge::before { content: ""; width: calc(6 * var(--cv-u)); height: calc(6 * var(--cv-u)); border-radius: 50%; background: currentColor; }
+.cv_badge.is-agent { background: var(--mauve-200); color: var(--mauve-ink); --glow: var(--glow-mauve); }
+.cv_badge.is-ok    { background: var(--sage-300); color: var(--sage-900); --glow: var(--glow-sage); }
+.cv_actfoot { padding-top: calc(16 * var(--cv-u)); border-top: 1px solid var(--glass-line); font-size: calc(12 * var(--cv-u)); line-height: calc(16 * var(--cv-u)); color: var(--muted-2); }
 
 /* ---------- Act motion: one event after another down the rail; each phase ticks off when it's reached ---------- */
-.cv--act {
+.cv_visual.is-act {
   --t-card:  0s;
   --t-head:  calc(.20s * var(--k));
   --t-ev:    calc(.60s * var(--k));     /* first event */
@@ -691,30 +692,30 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
   --t-flow:  calc(.32s * var(--k));     /* after a step lands, the stroke starts filling toward the next */
   --flow:    calc(.48s * var(--k));     /* fill duration = the rest of the step */
 }
-.cv-phase.cv-1 { --at-ev: 0; } .cv-phase.cv-2 { --at-ev: 2; } .cv-phase.cv-3 { --at-ev: 4; }   /* Detected · Routed (paged) · Handled */
-.is-active .cv--act .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
-.is-active .cv-acthead .title { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
-.is-active .cv-phase     { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards, cv-pending calc(.45s * var(--k)) ease-out backwards;
+.cv_phase.is-1 { --at-ev: 0; } .cv_phase.is-2 { --at-ev: 2; } .cv_phase.is-3 { --at-ev: 4; }   /* Detected · Routed (paged) · Handled */
+.is-active .cv_visual.is-act .cv_card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
+.is-active .cv_acthead .cv_title { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
+.is-active .cv_phase     { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards, cv-pending calc(.45s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-head) + var(--i) * var(--stagger)), calc(var(--t-ev) + var(--at-ev) * var(--ev-gap) + .1s * var(--k)); will-change: transform; }
-.is-active .cv-phase .ck { --glyph-glow: var(--glow-sage); animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_phase .cv_check { --glyph-glow: var(--glow-sage); animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--t-ev) + var(--at-ev) * var(--ev-gap) + .1s * var(--k)); will-change: transform; }
-.is-active .cv-sep       { animation: cv-wipe-right calc(.3s * var(--k)) var(--ease-in-out-cubic) backwards;
+.is-active .cv_sep       { animation: cv-wipe-right calc(.3s * var(--k)) var(--ease-in-out-cubic) backwards;
                            animation-delay: calc(var(--t-head) + .3s * var(--k) + var(--i) * var(--stagger)); will-change: transform; }
-.is-active .cv-ev .cv-node { animation: cv-pop calc(.55s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_ev .cv_node { animation: cv-pop calc(.55s * var(--k)) var(--ease-spring) backwards;
                            animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap)); will-change: transform; }
-.is-active .cv-ev .content { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_ev .cv_content { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
                            animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .06s * var(--k)); will-change: transform; }
-.is-active .cv-ev .line  { animation: cv-fade calc(.3s * var(--k)) ease-out backwards;
+.is-active .cv_ev .cv_rail_line  { animation: cv-fade calc(.3s * var(--k)) ease-out backwards;
                            animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .15s * var(--k)); will-change: transform; }
-.is-active .cv-ev .line::after  { animation: cv-fill var(--flow) var(--ease-in-out-cubic) backwards;
+.is-active .cv_ev .cv_rail_line::after  { animation: cv-fill var(--flow) var(--ease-in-out-cubic) backwards;
                            animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + var(--t-flow)); will-change: transform; }
-.is-active .cv-ev .line::before { animation: cv-tip var(--flow) var(--ease-in-out-cubic) backwards;
+.is-active .cv_ev .cv_rail_line::before { animation: cv-tip var(--flow) var(--ease-in-out-cubic) backwards;
                            animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + var(--t-flow)); will-change: transform; }
-.is-active .cv-badge     { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(.9s * var(--k)) ease-out;
+.is-active .cv_badge     { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(.9s * var(--k)) ease-out;
                            animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .3s * var(--k)), calc(var(--t-ev) + var(--i) * var(--ev-gap) + .4s * var(--k)); will-change: transform; }
 /* the outcome: "handled in 2 min" arrives with the last event, then the footer */
-.is-active .cv-took      { animation: cv-swap calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .2s * var(--k)); will-change: transform; }
-.is-active .cv-actfoot   { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .45s * var(--k)); will-change: transform; }
+.is-active .cv_took      { animation: cv-swap calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .2s * var(--k)); will-change: transform; }
+.is-active .cv_actfoot   { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .45s * var(--k)); will-change: transform; }
 @keyframes cv-pending { from { opacity: .45; } }
 @keyframes cv-fill { from { transform: scaleY(0); } }
 @keyframes cv-tip  { 0% { top: 0; opacity: 1; } 85% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
@@ -723,46 +724,46 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 /* Three cards in a row (not tabs). Each visual lives in a square 451 × 451 area at the top of
    its card; the card copy below is normal Webflow text. The three play together once the section
    scrolls into view; on phones each plays on its own as it comes into view. */
-.cv-frame--square { aspect-ratio: 1 / 1; padding: 0; }
-.cv-stacked .cv-frame--square { aspect-ratio: 1 / 1; }
+.cv_frame.is-square { aspect-ratio: 1 / 1; padding: 0; }
+.is-cv-stacked .cv_frame.is-square { aspect-ratio: 1 / 1; }
 
 /* ============================================================
    01 · Notify — iOS lock screen, alerts land on it
    ============================================================ */
-.cv--notify { position: relative; width: calc(451 * var(--cv-u)); height: calc(451 * var(--cv-u)); overflow: hidden; }
-.cv--notify .glow { position: absolute; left: calc(140 * var(--cv-u)); top: calc(138 * var(--cv-u)); width: calc(170 * var(--cv-u)); height: calc(165 * var(--cv-u)); border-radius: 50%;
+.cv_visual.is-notify { position: relative; width: calc(451 * var(--cv-u)); height: calc(451 * var(--cv-u)); overflow: hidden; }
+.cv_visual.is-notify .cv_glow { position: absolute; left: calc(140 * var(--cv-u)); top: calc(138 * var(--cv-u)); width: calc(170 * var(--cv-u)); height: calc(165 * var(--cv-u)); border-radius: 50%;
   background: #ebeff3; filter: blur(calc(110 * var(--cv-u))); opacity: .5; }
-.cv--notify .phone { position: absolute; left: calc(70.5 * var(--cv-u)); top: calc(70 * var(--cv-u)); width: calc(309 * var(--cv-u)); height: auto; display: block; }
-.cv-ios { position: absolute; left: calc(96.6 * var(--cv-u)); width: calc(256.8 * var(--cv-u)); min-height: calc(57.2 * var(--cv-u)); padding: calc(9.6 * var(--cv-u)); border-radius: calc(16.5 * var(--cv-u));
+.cv_visual.is-notify .cv_phone { position: absolute; left: calc(70.5 * var(--cv-u)); top: calc(70 * var(--cv-u)); width: calc(309 * var(--cv-u)); height: auto; display: block; }
+.cv_ios { position: absolute; left: calc(96.6 * var(--cv-u)); width: calc(256.8 * var(--cv-u)); min-height: calc(57.2 * var(--cv-u)); padding: calc(9.6 * var(--cv-u)); border-radius: calc(16.5 * var(--cv-u));
   display: grid; grid-template-columns: calc(26.3 * var(--cv-u)) 1fr; column-gap: calc(6.9 * var(--cv-u)); align-items: start;
   background: rgb(40 40 42 / .82); -webkit-backdrop-filter: blur(calc(12 * var(--cv-u))); backdrop-filter: blur(calc(12 * var(--cv-u)));
   box-shadow: inset 0 0 0 .5px rgb(255 255 255 / .1), 0 calc(8 * var(--cv-u)) calc(22 * var(--cv-u)) rgb(0 0 0 / .35);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-sans); color: #fff; }
-.cv-ios.cv-1 { top: calc(255.1 * var(--cv-u)); } .cv-ios.cv-2 { top: calc(317.8 * var(--cv-u)); }
-.cv-ios .app { position: relative; width: calc(26.3 * var(--cv-u)); height: calc(26.3 * var(--cv-u)); border-radius: 50%; background: #060709;
+.cv_ios.is-1 { top: calc(255.1 * var(--cv-u)); } .cv_ios.is-2 { top: calc(317.8 * var(--cv-u)); }
+.cv_ios .cv_app { position: relative; width: calc(26.3 * var(--cv-u)); height: calc(26.3 * var(--cv-u)); border-radius: 50%; background: #060709;
   display: grid; place-items: center; }
-.cv-ios .app svg { width: calc(16.7 * var(--cv-u)); height: calc(10 * var(--cv-u)); }
-.cv-ios .badge { position: absolute; right: calc(-4 * var(--cv-u)); bottom: calc(-4 * var(--cv-u)); width: calc(11 * var(--cv-u)); height: calc(11 * var(--cv-u)); border-radius: calc(3.4 * var(--cv-u)); background: #fff;
+.cv_ios .cv_app svg { width: calc(16.7 * var(--cv-u)); height: calc(10 * var(--cv-u)); }
+.cv_ios .cv_badge_icon { position: absolute; right: calc(-4 * var(--cv-u)); bottom: calc(-4 * var(--cv-u)); width: calc(11 * var(--cv-u)); height: calc(11 * var(--cv-u)); border-radius: calc(3.4 * var(--cv-u)); background: #fff;
   display: grid; place-items: center; }
-.cv-ios .badge svg { width: calc(7.6 * var(--cv-u)); height: calc(7.6 * var(--cv-u)); }
-.cv-ios .txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.cv-ios .row { display: flex; justify-content: space-between; align-items: baseline; gap: calc(6.9 * var(--cv-u)); }
-.cv-ios .t { font-size: calc(10.3 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 600; }
-.cv-ios .d { font-size: calc(8.9 * var(--cv-u)); line-height: calc(12.4 * var(--cv-u)); letter-spacing: calc(-.12 * var(--cv-u));
+.cv_ios .cv_badge_icon svg { width: calc(7.6 * var(--cv-u)); height: calc(7.6 * var(--cv-u)); }
+.cv_ios .cv_text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.cv_ios .cv_hrow { display: flex; justify-content: space-between; align-items: baseline; gap: calc(6.9 * var(--cv-u)); }
+.cv_ios .cv_name { font-size: calc(10.3 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 600; }
+.cv_ios .cv_desc { font-size: calc(8.9 * var(--cv-u)); line-height: calc(12.4 * var(--cv-u)); letter-spacing: calc(-.12 * var(--cv-u));
   margin-right: calc(-6 * var(--cv-u)); }   /* slack: the copy fits 2 lines with <1px to spare; let it use a bit of the padding */
-.cv-ios .time { font-size: calc(10.3 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: #8a8a8e; white-space: nowrap; }
+.cv_ios .cv_time { font-size: calc(10.3 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); color: #8a8a8e; white-space: nowrap; }
 
 /* Notify motion: phone settles, then two alerts land. The older one (cv-2) arrives first in the top
    slot; the newer one (cv-1) drops in on top and pushes it down — like a real lock screen. */
-.cv--notify { --t-phone: 0s; --t-first: calc(.75s * var(--k)); --t-second: calc(1.55s * var(--k)); }
-.is-active .cv--notify .phone { animation: cv-phone-in calc(.9s * var(--k)) var(--ease-settle) backwards;
+.cv_visual.is-notify { --t-phone: 0s; --t-first: calc(.75s * var(--k)); --t-second: calc(1.55s * var(--k)); }
+.is-active .cv_visual.is-notify .cv_phone { animation: cv-phone-in calc(.9s * var(--k)) var(--ease-settle) backwards;
                                animation-delay: calc(var(--t0, 0s) + var(--t-phone)); will-change: transform; }
-.is-active .cv--notify .glow  { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
+.is-active .cv_visual.is-notify .cv_glow  { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
 /* the older alert: lands in the top slot (calc(62.7 * var(--cv-u)) above its final spot), then gets pushed down */
-.is-active .cv-ios.cv-2 { animation: cv-ios-first calc(1.25s * var(--k)) linear backwards;
+.is-active .cv_ios.is-2 { animation: cv-ios-first calc(1.25s * var(--k)) linear backwards;
                           animation-delay: calc(var(--t0, 0s) + var(--t-first)); will-change: transform; }
 /* the newer alert: drops in from above with a spring */
-.is-active .cv-ios.cv-1 { animation: cv-ios-drop calc(.6s * var(--k)) var(--ease-spring) backwards;
+.is-active .cv_ios.is-1 { animation: cv-ios-drop calc(.6s * var(--k)) var(--ease-spring) backwards;
                           animation-delay: calc(var(--t0, 0s) + var(--t-second)); will-change: transform; }
 @keyframes cv-glow-in { from { opacity: 0; } }
 /* the phone just rises into place (no grow); the alerts keep their springy pop */
@@ -779,62 +780,62 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 /* ============================================================
    02 · Ask — a chat with Clarify
    ============================================================ */
-.cv--ask { position: relative; display: block; width: calc(451 * var(--cv-u)); height: calc(451 * var(--cv-u)); overflow: hidden;
+.cv_visual.is-ask { position: relative; display: block; width: calc(451 * var(--cv-u)); height: calc(451 * var(--cv-u)); overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-sans); }
-.cv--ask .glow { position: absolute; left: calc(132 * var(--cv-u)); top: calc(90 * var(--cv-u)); width: calc(186 * var(--cv-u)); height: calc(157 * var(--cv-u)); border-radius: 50%;
+.cv_visual.is-ask .cv_glow { position: absolute; left: calc(132 * var(--cv-u)); top: calc(90 * var(--cv-u)); width: calc(186 * var(--cv-u)); height: calc(157 * var(--cv-u)); border-radius: 50%;
   background: #ebeff3; filter: blur(calc(110 * var(--cv-u))); opacity: .5; }
-.cv-chat { position: absolute; left: calc(45.5 * var(--cv-u)); top: calc(66 * var(--cv-u)); width: calc(360 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(4 * var(--cv-u)); }
+.cv_chat { position: absolute; left: calc(45.5 * var(--cv-u)); top: calc(66 * var(--cv-u)); width: calc(360 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(4 * var(--cv-u)); }
 /* a message = glass shell (outer) + glass panel (inner) */
-.cv-msg, .cv-compose { box-sizing: border-box; padding: calc(1.5 * var(--cv-u)); border-radius: calc(11.75 * var(--cv-u)); background: rgb(20 20 20 / .55);
+.cv_msg, .cv_compose { box-sizing: border-box; padding: calc(1.5 * var(--cv-u)); border-radius: calc(11.75 * var(--cv-u)); background: rgb(20 20 20 / .55);
   border: .5px solid var(--glass-line); -webkit-backdrop-filter: blur(calc(73 * var(--cv-u))); backdrop-filter: blur(calc(73 * var(--cv-u))); }
-.cv-msg > div, .cv-compose > div { box-sizing: border-box; padding: calc(9.5 * var(--cv-u)); border-radius: calc(9.8 * var(--cv-u)); background: rgb(20 20 20 / .25);
+.cv_msg > div, .cv_compose > div { box-sizing: border-box; padding: calc(9.5 * var(--cv-u)); border-radius: calc(9.8 * var(--cv-u)); background: rgb(20 20 20 / .25);
   border: .5px solid var(--glass-line); }
-.cv-msg > div { display: flex; gap: calc(7.5 * var(--cv-u)); align-items: flex-start; }
-.cv-msg .av { flex: none; width: calc(22.4 * var(--cv-u)); height: calc(22.4 * var(--cv-u)); border-radius: 50%; object-fit: cover; display: block; }
-.cv-msg--ai .av { display: grid; place-items: center; background: #060709; }
-.cv-msg--ai .av svg { width: calc(16.7 * var(--cv-u)); height: calc(10 * var(--cv-u)); }
-.cv-msg .txt { position: relative; flex: 1; display: flex; flex-direction: column; gap: 0; min-width: 0; }
-.cv-msg .who { font-size: calc(11.2 * var(--cv-u)); line-height: calc(21 * var(--cv-u)); font-weight: 600; letter-spacing: calc(-.38 * var(--cv-u)); color: var(--text-primary); }
-.cv-msg .said { font-size: calc(11.2 * var(--cv-u)); line-height: calc(13 * var(--cv-u)); letter-spacing: calc(-.1 * var(--cv-u)); color: #b7bec5; }
+.cv_msg > div { display: flex; gap: calc(7.5 * var(--cv-u)); align-items: flex-start; }
+.cv_msg .cv_avatar { flex: none; width: calc(22.4 * var(--cv-u)); height: calc(22.4 * var(--cv-u)); border-radius: 50%; object-fit: cover; display: block; }
+.cv_msg.is-ai .cv_avatar { display: grid; place-items: center; background: #060709; }
+.cv_msg.is-ai .cv_avatar svg { width: calc(16.7 * var(--cv-u)); height: calc(10 * var(--cv-u)); }
+.cv_msg .cv_text { position: relative; flex: 1; display: flex; flex-direction: column; gap: 0; min-width: 0; }
+.cv_msg .cv_who { font-size: calc(11.2 * var(--cv-u)); line-height: calc(21 * var(--cv-u)); font-weight: 600; letter-spacing: calc(-.38 * var(--cv-u)); color: var(--text-primary); }
+.cv_msg .cv_said { font-size: calc(11.2 * var(--cv-u)); line-height: calc(13 * var(--cv-u)); letter-spacing: calc(-.1 * var(--cv-u)); color: #b7bec5; }
 /* "thinking" dots: hidden at rest, shown only while Clarify thinks */
-.cv-think { position: absolute; left: 0; top: calc(25 * var(--cv-u)); display: flex; gap: calc(3 * var(--cv-u)); opacity: 0; }
-.cv-think i { width: calc(4 * var(--cv-u)); height: calc(4 * var(--cv-u)); border-radius: 50%; background: #b7bec5; }
-.cv-compose { position: absolute; left: calc(45.5 * var(--cv-u)); top: calc(308.7 * var(--cv-u)); width: calc(360 * var(--cv-u)); }
-.cv-compose > div { display: flex; flex-direction: column; gap: calc(14.9 * var(--cv-u)); padding: calc(10.5 * var(--cv-u)) calc(9.5 * var(--cv-u)) calc(11 * var(--cv-u)); }
-.cv-compose .ph { font-family: var(--font-sans); font-size: calc(9.3 * var(--cv-u)); line-height: calc(13 * var(--cv-u)); font-weight: 500; color: #fff; }
-.cv-compose .bar { display: flex; justify-content: space-between; }
-.cv-compose .grp { display: flex; gap: calc(1.9 * var(--cv-u)); }
-.cv-compose .btn, .cv-compose .pill { box-sizing: border-box; height: calc(22.4 * var(--cv-u)); border-radius: 999px; background: rgb(20 20 20 / .25);
+.cv_think { position: absolute; left: 0; top: calc(25 * var(--cv-u)); display: flex; gap: calc(3 * var(--cv-u)); opacity: 0; }
+.cv_think i { width: calc(4 * var(--cv-u)); height: calc(4 * var(--cv-u)); border-radius: 50%; background: #b7bec5; }
+.cv_compose { position: absolute; left: calc(45.5 * var(--cv-u)); top: calc(308.7 * var(--cv-u)); width: calc(360 * var(--cv-u)); }
+.cv_compose > div { display: flex; flex-direction: column; gap: calc(14.9 * var(--cv-u)); padding: calc(10.5 * var(--cv-u)) calc(9.5 * var(--cv-u)) calc(11 * var(--cv-u)); }
+.cv_compose .cv_placeholder { font-family: var(--font-sans); font-size: calc(9.3 * var(--cv-u)); line-height: calc(13 * var(--cv-u)); font-weight: 500; color: #fff; }
+.cv_compose .cv_bar { display: flex; justify-content: space-between; }
+.cv_compose .cv_group { display: flex; gap: calc(1.9 * var(--cv-u)); }
+.cv_compose .cv_btn, .cv_compose .cv_pill_btn { box-sizing: border-box; height: calc(22.4 * var(--cv-u)); border-radius: 999px; background: rgb(20 20 20 / .25);
   border: .5px solid var(--glass-line); display: inline-flex; align-items: center; justify-content: center; }
-.cv-compose .btn { width: calc(22.4 * var(--cv-u)); }
-.cv-compose .btn svg { width: calc(11.2 * var(--cv-u)); height: calc(11.2 * var(--cv-u)); }
-.cv-compose .pill { padding: 0 calc(11.2 * var(--cv-u)); gap: calc(3.7 * var(--cv-u)); font-family: var(--font-sans); font-size: calc(9.3 * var(--cv-u)); font-weight: 500; color: #fff; }
-.cv-compose .pill svg { width: calc(9.3 * var(--cv-u)); height: calc(9.3 * var(--cv-u)); }
+.cv_compose .cv_btn { width: calc(22.4 * var(--cv-u)); }
+.cv_compose .cv_btn svg { width: calc(11.2 * var(--cv-u)); height: calc(11.2 * var(--cv-u)); }
+.cv_compose .cv_pill_btn { padding: 0 calc(11.2 * var(--cv-u)); gap: calc(3.7 * var(--cv-u)); font-family: var(--font-sans); font-size: calc(9.3 * var(--cv-u)); font-weight: 500; color: #fff; }
+.cv_compose .cv_pill_btn svg { width: calc(9.3 * var(--cv-u)); height: calc(9.3 * var(--cv-u)); }
 
 /* Ask motion: the composer settles; you send a question; Clarify thinks (dots, mauve breath on its
    avatar), then the answer streams in line by line; you send the follow-up. Messages rise into place like a real chat. */
-.cv--ask { --t-q1: calc(.55s * var(--k)); --t-ai: calc(1.3s * var(--k)); --t-ans: calc(2.35s * var(--k));
+.cv_visual.is-ask { --t-q1: calc(.55s * var(--k)); --t-ai: calc(1.3s * var(--k)); --t-ans: calc(2.35s * var(--k));
            --t-q2: calc(3.3s * var(--k)); }
-.is-active .cv--ask .glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
-.is-active .cv-compose    { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); will-change: transform; }
-.cv-msg.cv-1 { --at: var(--t-q1); } .cv-msg.cv-2 { --at: var(--t-ai); } .cv-msg.cv-3 { --at: var(--t-q2); }
-.is-active .cv-msg        { animation: cv-settle calc(.8s * var(--k)) var(--ease-settle) backwards;
+.is-active .cv_visual.is-ask .cv_glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
+.is-active .cv_compose    { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); will-change: transform; }
+.cv_msg.is-1 { --at: var(--t-q1); } .cv_msg.is-2 { --at: var(--t-ai); } .cv_msg.is-3 { --at: var(--t-q2); }
+.is-active .cv_msg        { animation: cv-settle calc(.8s * var(--k)) var(--ease-settle) backwards;
                             animation-delay: calc(var(--t0, 0s) + var(--at)); will-change: transform; }
-.is-active .cv-msg:not(.cv-msg--ai) .said { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
+.is-active .cv_msg:not(.cv_msg.is-ai) .cv_said { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
                             animation-delay: calc(var(--t0, 0s) + var(--at) + .2s * var(--k)); will-change: transform; }
 /* send button presses just before each of your messages goes up */
-.is-active .cv-compose .send { animation: cv-press calc(.45s * var(--k)) ease-out backwards, cv-press calc(.45s * var(--k)) ease-out backwards;
+.is-active .cv_compose .is-send { animation: cv-press calc(.45s * var(--k)) ease-out backwards, cv-press calc(.45s * var(--k)) ease-out backwards;
   animation-delay: calc(var(--t0, 0s) + var(--t-q1) - .2s * var(--k)), calc(var(--t0, 0s) + var(--t-q2) - .2s * var(--k)); will-change: transform; }
 /* Clarify thinks … */
-.is-active .cv-think      { animation: cv-think calc(var(--t-ans) - var(--t-ai)) linear backwards;
+.is-active .cv_think      { animation: cv-think calc(var(--t-ans) - var(--t-ai)) linear backwards;
                             animation-delay: calc(var(--t0, 0s) + var(--t-ai)); will-change: transform; }
-.is-active .cv-think i    { animation: cv-bob calc(.6s * var(--k)) ease-in-out 3; animation-delay: calc(var(--t0, 0s) + var(--t-ai) + var(--i) * .12s * var(--k)); will-change: transform; }
-.cv-think i:nth-child(2) { --i: 1; } .cv-think i:nth-child(3) { --i: 2; }
-.cv-think i:first-child { --i: 0; }
-.is-active .cv-msg--ai .av { --breathe: var(--glow-mauve); animation: cv-breathe calc(.9s * var(--k)) ease-in-out 2;
+.is-active .cv_think i    { animation: cv-bob calc(.6s * var(--k)) ease-in-out 3; animation-delay: calc(var(--t0, 0s) + var(--t-ai) + var(--i) * .12s * var(--k)); will-change: transform; }
+.cv_think i:nth-child(2) { --i: 1; } .cv_think i:nth-child(3) { --i: 2; }
+.cv_think i:first-child { --i: 0; }
+.is-active .cv_msg.is-ai .cv_avatar { --breathe: var(--glow-mauve); animation: cv-breathe calc(.9s * var(--k)) ease-in-out 2;
                             animation-delay: calc(var(--t0, 0s) + var(--t-ai) + .1s * var(--k)); will-change: transform; }
 /* … then answers, streaming top to bottom */
-.is-active .cv-msg--ai .said { animation: cv-stream calc(.9s * var(--k)) ease-out backwards;
+.is-active .cv_msg.is-ai .cv_said { animation: cv-stream calc(.9s * var(--k)) ease-out backwards;
                             animation-delay: calc(var(--t0, 0s) + var(--t-ans)); will-change: transform; }
 @keyframes cv-press  { 0% { transform: scale(1); } 35% { transform: scale(.82); box-shadow: 0 0 0 0 var(--glow-mist); }
                        100% { transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--cv-u)) rgb(255 255 255 / 0); } }
@@ -845,103 +846,103 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 /* ============================================================
    03 · Build — a Clarify app shell, cropped by the card (only its top-left shows)
    ============================================================ */
-.cv--build { position: relative; display: block; width: calc(451 * var(--cv-u)); height: calc(451 * var(--cv-u)); overflow: hidden; font-family: var(--font-sans); }
-.cv--build .glow { position: absolute; left: calc(138 * var(--cv-u)); top: calc(78 * var(--cv-u)); width: calc(252 * var(--cv-u)); height: calc(205 * var(--cv-u)); border-radius: 50%;
+.cv_visual.is-build { position: relative; display: block; width: calc(451 * var(--cv-u)); height: calc(451 * var(--cv-u)); overflow: hidden; font-family: var(--font-sans); }
+.cv_visual.is-build .cv_glow { position: absolute; left: calc(138 * var(--cv-u)); top: calc(78 * var(--cv-u)); width: calc(252 * var(--cv-u)); height: calc(205 * var(--cv-u)); border-radius: 50%;
   background: #ebeff3; filter: blur(calc(110 * var(--cv-u))); opacity: .5; }
-.cv-shell { position: absolute; left: calc(127.7 * var(--cv-u)); top: calc(89 * var(--cv-u)); width: calc(619 * var(--cv-u)); height: calc(583 * var(--cv-u)); box-sizing: border-box; padding: calc(1.6 * var(--cv-u));
+.cv_shell { position: absolute; left: calc(127.7 * var(--cv-u)); top: calc(89 * var(--cv-u)); width: calc(619 * var(--cv-u)); height: calc(583 * var(--cv-u)); box-sizing: border-box; padding: calc(1.6 * var(--cv-u));
   border-radius: calc(12.6 * var(--cv-u)); background: rgb(20 20 20 / .55); border: .5px solid var(--glass-line);
   -webkit-backdrop-filter: blur(calc(79 * var(--cv-u))); backdrop-filter: blur(calc(79 * var(--cv-u))); }
-.cv-shell > div { height: 100%; box-sizing: border-box; display: flex; border-radius: calc(10.5 * var(--cv-u)); background: rgb(20 20 20 / .25);
+.cv_shell > div { height: 100%; box-sizing: border-box; display: flex; border-radius: calc(10.5 * var(--cv-u)); background: rgb(20 20 20 / .25);
   border: .5px solid var(--glass-line); overflow: hidden; }
-.cv-shell .rail { flex: none; width: calc(31.5 * var(--cv-u)); box-sizing: border-box; padding: calc(10.5 * var(--cv-u)) calc(5.8 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(3.1 * var(--cv-u));
+.cv_shell .cv_rail { flex: none; width: calc(31.5 * var(--cv-u)); box-sizing: border-box; padding: calc(10.5 * var(--cv-u)) calc(5.8 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(3.1 * var(--cv-u));
   border-right: .5px solid var(--glass-line); }
-.cv-shell .nav { width: calc(19.9 * var(--cv-u)); height: calc(19.9 * var(--cv-u)); border-radius: calc(6.3 * var(--cv-u)); display: grid; place-items: center; }
-.cv-shell .nav.on { background: rgb(249 250 252 / .08); }
-.cv-shell .nav i { display: flex; flex-direction: column; align-items: center; gap: calc(1.5 * var(--cv-u)); }
-.cv-shell .nav b { display: block; height: .8px; border-radius: .5px; background: rgb(249 250 252 / .4); width: calc(7.9 * var(--cv-u)); }
-.cv-shell .nav b:nth-child(2) { width: calc(6.3 * var(--cv-u)); } .cv-shell .nav b:nth-child(3) { width: calc(4.7 * var(--cv-u)); }
-.cv-shell .nav.cv-3 b { width: calc(8.4 * var(--cv-u)); height: 1px; }
-.cv-shell .nav i.g { display: grid; grid-template-columns: calc(3.1 * var(--cv-u)) calc(3.1 * var(--cv-u)); gap: calc(1.6 * var(--cv-u)); }
-.cv-shell .nav i.g b { width: calc(3.1 * var(--cv-u)); height: calc(3.1 * var(--cv-u)); border-radius: .8px; background: #f9fafc; }
-.cv-shell .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.cv-shell .top { height: calc(35.3 * var(--cv-u)); box-sizing: border-box; padding: 0 calc(14.7 * var(--cv-u)); display: flex; align-items: baseline; gap: calc(6.3 * var(--cv-u));
+.cv_shell .cv_nav { width: calc(19.9 * var(--cv-u)); height: calc(19.9 * var(--cv-u)); border-radius: calc(6.3 * var(--cv-u)); display: grid; place-items: center; }
+.cv_shell .cv_nav.is-on { background: rgb(249 250 252 / .08); }
+.cv_shell .cv_nav i { display: flex; flex-direction: column; align-items: center; gap: calc(1.5 * var(--cv-u)); }
+.cv_shell .cv_nav b { display: block; height: .8px; border-radius: .5px; background: rgb(249 250 252 / .4); width: calc(7.9 * var(--cv-u)); }
+.cv_shell .cv_nav b:nth-child(2) { width: calc(6.3 * var(--cv-u)); } .cv_shell .cv_nav b:nth-child(3) { width: calc(4.7 * var(--cv-u)); }
+.cv_shell .cv_nav.is-3 b { width: calc(8.4 * var(--cv-u)); height: 1px; }
+.cv_shell .cv_nav i.is-grid { display: grid; grid-template-columns: calc(3.1 * var(--cv-u)) calc(3.1 * var(--cv-u)); gap: calc(1.6 * var(--cv-u)); }
+.cv_shell .cv_nav i.is-grid b { width: calc(3.1 * var(--cv-u)); height: calc(3.1 * var(--cv-u)); border-radius: .8px; background: #f9fafc; }
+.cv_shell .cv_main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.cv_shell .cv_top { height: calc(35.3 * var(--cv-u)); box-sizing: border-box; padding: 0 calc(14.7 * var(--cv-u)); display: flex; align-items: baseline; gap: calc(6.3 * var(--cv-u));
   padding-top: calc(11.5 * var(--cv-u)); border-bottom: .5px solid var(--glass-line); }
-.cv-shell .top .h { font-size: calc(9.4 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 600; color: var(--text-primary); }
-.cv-shell .top .scope { font-family: var(--font-mono); font-size: calc(5.2 * var(--cv-u)); letter-spacing: .1em; color: rgb(249 250 252 / .6); }   /* .6 = passes 4.5:1 (was .45) */
-.cv-shell .body { padding: calc(12.6 * var(--cv-u)) calc(14.7 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(6.3 * var(--cv-u)); }
-.cv-q { height: calc(27.9 * var(--cv-u)); box-sizing: border-box; padding: 0 calc(8.4 * var(--cv-u)); display: flex; align-items: center; gap: calc(6.3 * var(--cv-u));
+.cv_shell .cv_top .cv_top_title { font-size: calc(9.4 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 600; color: var(--text-primary); }
+.cv_shell .cv_top .cv_scope { font-family: var(--font-mono); font-size: calc(5.2 * var(--cv-u)); letter-spacing: .1em; color: rgb(249 250 252 / .6); }   /* .6 = passes 4.5:1 (was .45) */
+.cv_shell .cv_body { padding: calc(12.6 * var(--cv-u)) calc(14.7 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(6.3 * var(--cv-u)); }
+.cv_q { height: calc(27.9 * var(--cv-u)); box-sizing: border-box; padding: 0 calc(8.4 * var(--cv-u)); display: flex; align-items: center; gap: calc(6.3 * var(--cv-u));
   border: .5px solid var(--glass-line); border-radius: calc(6.3 * var(--cv-u)); font-family: var(--font-mono); font-size: calc(6.3 * var(--cv-u)); line-height: calc(8 * var(--cv-u)); }
-.cv-q .ic { color: rgb(249 250 252 / .4); }
-.cv-q .qt { flex: 1; min-width: 0; color: rgb(249 250 252 / .75); white-space: nowrap; }
-.cv-q .run { padding: calc(3.1 * var(--cv-u)) calc(7.3 * var(--cv-u)); border-radius: 999px; background: #f9fafc; color: #141414; font-family: var(--font-sans);
+.cv_q .cv_query_icon { color: rgb(249 250 252 / .4); }
+.cv_q .cv_query { flex: 1; min-width: 0; color: rgb(249 250 252 / .75); white-space: nowrap; }
+.cv_q .cv_run { padding: calc(3.1 * var(--cv-u)) calc(7.3 * var(--cv-u)); border-radius: 999px; background: #f9fafc; color: #141414; font-family: var(--font-sans);
   font-size: calc(5.8 * var(--cv-u)); font-weight: 500; }
-.cv-plate { box-sizing: border-box; padding: calc(1.6 * var(--cv-u)); border-radius: calc(8.4 * var(--cv-u)); background: rgb(20 20 20 / .45); border: .5px solid var(--glass-line); }
-.cv-plate > div { border-radius: calc(6.3 * var(--cv-u)); background: rgb(20 20 20 / .25); border: .5px solid var(--glass-line); }
-.cv-kpis { display: flex; height: calc(72.7 * var(--cv-u)); box-sizing: border-box; }
-.cv-kpis .kpi { width: calc(137.4 * var(--cv-u)); box-sizing: border-box; padding: calc(10.5 * var(--cv-u)) calc(12.6 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(7.3 * var(--cv-u)); }
-.cv-kpis .kpi + .kpi { border-left: .5px solid var(--glass-line); }
-.cv-kpis .l { font-size: calc(6.8 * var(--cv-u)); line-height: calc(9 * var(--cv-u)); color: rgb(249 250 252 / .7); }
-.cv-kpis .v { font-family: var(--font-mono); font-size: calc(16.8 * var(--cv-u)); line-height: calc(21 * var(--cv-u)); font-weight: 500; color: var(--text-primary); }
-.cv--build .dl { display: flex; gap: calc(3.1 * var(--cv-u)); font-family: var(--font-mono); font-size: calc(5.8 * var(--cv-u)); line-height: calc(7 * var(--cv-u)); }
-.cv--build .dl .up { color: var(--sage-600); } .cv--build .dl .flat { color: rgb(249 250 252 / .55); }
-.cv--build .dl .n { color: rgb(249 250 252 / .55); }   /* .55 = passes 4.5:1 contrast (was .4) */
-.cv-panel { box-sizing: border-box; height: calc(217.7 * var(--cv-u)); padding: calc(13.6 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(9.4 * var(--cv-u)); }
-.cv-panel .chrome { display: flex; align-items: center; gap: calc(6.3 * var(--cv-u)); }
-.cv-panel .badge { width: calc(17.8 * var(--cv-u)); height: calc(17.8 * var(--cv-u)); box-sizing: border-box; border-radius: calc(6.3 * var(--cv-u)); background: rgb(249 250 252 / .04);
+.cv_plate { box-sizing: border-box; padding: calc(1.6 * var(--cv-u)); border-radius: calc(8.4 * var(--cv-u)); background: rgb(20 20 20 / .45); border: .5px solid var(--glass-line); }
+.cv_plate > div { border-radius: calc(6.3 * var(--cv-u)); background: rgb(20 20 20 / .25); border: .5px solid var(--glass-line); }
+.cv_kpis { display: flex; height: calc(72.7 * var(--cv-u)); box-sizing: border-box; }
+.cv_kpis .cv_kpis_item { width: calc(137.4 * var(--cv-u)); box-sizing: border-box; padding: calc(10.5 * var(--cv-u)) calc(12.6 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(7.3 * var(--cv-u)); }
+.cv_kpis .cv_kpis_item + .cv_kpis_item { border-left: .5px solid var(--glass-line); }
+.cv_kpis .cv_kpi_label { font-size: calc(6.8 * var(--cv-u)); line-height: calc(9 * var(--cv-u)); color: rgb(249 250 252 / .7); }
+.cv_kpis .cv_figure { font-family: var(--font-mono); font-size: calc(16.8 * var(--cv-u)); line-height: calc(21 * var(--cv-u)); font-weight: 500; color: var(--text-primary); }
+.cv_visual.is-build .cv_delta { display: flex; gap: calc(3.1 * var(--cv-u)); font-family: var(--font-mono); font-size: calc(5.8 * var(--cv-u)); line-height: calc(7 * var(--cv-u)); }
+.cv_visual.is-build .cv_delta .is-up { color: var(--sage-600); } .cv_visual.is-build .cv_delta .is-flat { color: rgb(249 250 252 / .55); }
+.cv_visual.is-build .cv_delta .cv_delta_note { color: rgb(249 250 252 / .55); }   /* .55 = passes 4.5:1 contrast (was .4) */
+.cv_panel { box-sizing: border-box; height: calc(217.7 * var(--cv-u)); padding: calc(13.6 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(9.4 * var(--cv-u)); }
+.cv_panel .cv_chrome { display: flex; align-items: center; gap: calc(6.3 * var(--cv-u)); }
+.cv_panel .cv_badge_icon { width: calc(17.8 * var(--cv-u)); height: calc(17.8 * var(--cv-u)); box-sizing: border-box; border-radius: calc(6.3 * var(--cv-u)); background: rgb(249 250 252 / .04);
   border: .5px solid var(--glass-line); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(1.5 * var(--cv-u)); }
-.cv-panel .badge b { display: block; height: .8px; width: calc(7.9 * var(--cv-u)); border-radius: .5px; background: rgb(249 250 252 / .7); }
-.cv-panel .badge b:nth-child(2) { width: calc(6.3 * var(--cv-u)); } .cv-panel .badge b:nth-child(3) { width: calc(4.7 * var(--cv-u)); }
-.cv-panel .chrome .t { font-size: calc(7.9 * var(--cv-u)); line-height: calc(10 * var(--cv-u)); font-weight: 500; color: var(--text-primary); white-space: nowrap; }
-.cv-panel .stat { display: flex; flex-direction: column; gap: calc(5.2 * var(--cv-u)); height: calc(38.2 * var(--cv-u)); }
-.cv-panel .stat .v { display: flex; align-items: baseline; gap: calc(3.1 * var(--cv-u)); }
-.cv-panel .stat .num { font-family: var(--font-mono); font-size: calc(21 * var(--cv-u)); line-height: calc(26 * var(--cv-u)); font-weight: 500; color: var(--text-primary); }
-.cv-panel .stat .u { font-size: calc(7.3 * var(--cv-u)); color: rgb(249 250 252 / .6); }
-.cv-panel .plot { position: relative; height: calc(115.4 * var(--cv-u)); }
-.cv-panel .y { position: absolute; left: 0; font-family: var(--font-mono); font-size: calc(4.7 * var(--cv-u)); line-height: calc(6 * var(--cv-u)); color: rgb(249 250 252 / .35); }
-.cv-panel .y.cv-1 { top: calc(1.6 * var(--cv-u)); } .cv-panel .y.cv-2 { top: calc(30.4 * var(--cv-u)); } .cv-panel .y.cv-3 { top: calc(59.3 * var(--cv-u)); } .cv-panel .y.cv-4 { top: calc(87.6 * var(--cv-u)); }
-.cv-panel .grid { position: absolute; left: 0; top: 0; width: calc(554 * var(--cv-u)); height: calc(100 * var(--cv-u)); overflow: visible; }
-.cv-panel .grid path { fill: none; stroke: rgb(139 139 139 / .2); stroke-width: .52; }
-.cv-panel .grid .min { stroke: rgb(227 135 125 / .4); stroke-dasharray: 1.6 1.6; }
+.cv_panel .cv_badge_icon b { display: block; height: .8px; width: calc(7.9 * var(--cv-u)); border-radius: .5px; background: rgb(249 250 252 / .7); }
+.cv_panel .cv_badge_icon b:nth-child(2) { width: calc(6.3 * var(--cv-u)); } .cv_panel .cv_badge_icon b:nth-child(3) { width: calc(4.7 * var(--cv-u)); }
+.cv_panel .cv_chrome .cv_name { font-size: calc(7.9 * var(--cv-u)); line-height: calc(10 * var(--cv-u)); font-weight: 500; color: var(--text-primary); white-space: nowrap; }
+.cv_panel .cv_stat { display: flex; flex-direction: column; gap: calc(5.2 * var(--cv-u)); height: calc(38.2 * var(--cv-u)); }
+.cv_panel .cv_stat .cv_figure { display: flex; align-items: baseline; gap: calc(3.1 * var(--cv-u)); }
+.cv_panel .cv_stat .cv_num { font-family: var(--font-mono); font-size: calc(21 * var(--cv-u)); line-height: calc(26 * var(--cv-u)); font-weight: 500; color: var(--text-primary); }
+.cv_panel .cv_stat .cv_unit_sm { font-size: calc(7.3 * var(--cv-u)); color: rgb(249 250 252 / .6); }
+.cv_panel .cv_panel_plot { position: relative; height: calc(115.4 * var(--cv-u)); }
+.cv_panel .cv_y_label { position: absolute; left: 0; font-family: var(--font-mono); font-size: calc(4.7 * var(--cv-u)); line-height: calc(6 * var(--cv-u)); color: rgb(249 250 252 / .35); }
+.cv_panel .cv_y_label.is-1 { top: calc(1.6 * var(--cv-u)); } .cv_panel .cv_y_label.is-2 { top: calc(30.4 * var(--cv-u)); } .cv_panel .cv_y_label.is-3 { top: calc(59.3 * var(--cv-u)); } .cv_panel .cv_y_label.is-4 { top: calc(87.6 * var(--cv-u)); }
+.cv_panel .cv_plot_grid { position: absolute; left: 0; top: 0; width: calc(554 * var(--cv-u)); height: calc(100 * var(--cv-u)); overflow: visible; }
+.cv_panel .cv_plot_grid path { fill: none; stroke: rgb(139 139 139 / .2); stroke-width: .52; }
+.cv_panel .cv_plot_grid .is-min { stroke: rgb(227 135 125 / .4); stroke-dasharray: 1.6 1.6; }
 /* the lines: only the part the card shows (calc(256 * var(--cv-u))) is drawn */
-.cv-lines { position: absolute; left: calc(23 * var(--cv-u)); top: 0; width: calc(256 * var(--cv-u)); height: calc(100 * var(--cv-u));
+.cv_lines { position: absolute; left: calc(23 * var(--cv-u)); top: 0; width: calc(256 * var(--cv-u)); height: calc(100 * var(--cv-u));
   clip-path: inset(calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) 0); }   /* = where the wipe ends, so nothing pops when it finishes */
-.cv-lines svg { width: calc(256 * var(--cv-u)); height: calc(100 * var(--cv-u)); display: block; overflow: visible; }
-.cv-lines path { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: .63; }
-.cv-lines .p4 { stroke: var(--sage-600); stroke-width: .84; } .cv-lines .p1 { stroke: #8fb6d8; }
-.cv-lines .p2 { stroke: #c9a7c4; } .cv-lines .p3 { stroke: #8fa3b0; }
+.cv_lines svg { width: calc(256 * var(--cv-u)); height: calc(100 * var(--cv-u)); display: block; overflow: visible; }
+.cv_lines path { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: .63; }
+.cv_lines .is-p4 { stroke: var(--sage-600); stroke-width: .84; } .cv_lines .is-p1 { stroke: #8fb6d8; }
+.cv_lines .is-p2 { stroke: #c9a7c4; } .cv_lines .is-p3 { stroke: #8fa3b0; }
 
 /* Build motion: the app settles in already filled; only the data moves — the numbers count up
    and the lines draw. */
-.cv--build { --t-data: calc(.45s * var(--k)); --t-draw: calc(.55s * var(--k)); --draw-b: calc(1.3s * var(--k)); }
-.is-active .cv--build .glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
-.is-active .cv-shell      { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); will-change: transform; }
-.is-active .cv--build .cv-count { animation: cv-count calc(.9s * var(--k)) cubic-bezier(.25, 1, .5, 1) backwards;
+.cv_visual.is-build { --t-data: calc(.45s * var(--k)); --t-draw: calc(.55s * var(--k)); --draw-b: calc(1.3s * var(--k)); }
+.is-active .cv_visual.is-build .cv_glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
+.is-active .cv_shell      { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); will-change: transform; }
+.is-active .cv_visual.is-build .cv_count { animation: cv-count calc(.9s * var(--k)) cubic-bezier(.25, 1, .5, 1) backwards;
                             animation-delay: calc(var(--t0, 0s) + var(--t-data) + var(--i, 0) * .08s * var(--k)); will-change: transform; }
-.cv-kpis .kpi.cv-1 .cv-count { --i: 0; } .cv-kpis .kpi.cv-2 .cv-count { --i: 1; } .cv-panel .stat .cv-count { --i: 2; }
-.is-active .cv-lines      { animation: cv-wipe-plot var(--draw-b) linear backwards; animation-delay: calc(var(--t0, 0s) + var(--t-draw)); will-change: transform; }
+.cv_kpis .cv_kpis_item.is-1 .cv_count { --i: 0; } .cv_kpis .cv_kpis_item.is-2 .cv_count { --i: 1; } .cv_panel .cv_stat .cv_count { --i: 2; }
+.is-active .cv_lines      { animation: cv-wipe-plot var(--draw-b) linear backwards; animation-delay: calc(var(--t0, 0s) + var(--t-draw)); will-change: transform; }
 /* no left overhang, or the round line caps would show as dots before the draw */
 @keyframes cv-wipe-plot { from { clip-path: inset(calc(-4 * var(--cv-u)) 100% calc(-4 * var(--cv-u)) 0); } to { clip-path: inset(calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) 0); } }
 
 /* glow colour per element: Sage = sensors, Mist = people, Mauve = agent */
-.cv-dot { --glow: var(--glow-sage); }
-.cv-pill, .cv-toggle { --glow: var(--glow-sage); }
-.cv-note-dot, .cv-note-tag, .cv-pill--mist { --glow: var(--glow-mist); }
-.cv-chip, .cv-fired { --glow: var(--glow-mauve); }
-.cv-stream i { --breathe: rgb(162 208 193 / .45); }
+.cv_dot { --glow: var(--glow-sage); }
+.cv_pill, .cv_toggle { --glow: var(--glow-sage); }
+.cv_note_dot, .cv_note_tag, .cv_pill.is-mist { --glow: var(--glow-mist); }
+.cv_chip, .cv_fired { --glow: var(--glow-mauve); }
+.cv_stream i { --breathe: rgb(162 208 193 / .45); }
 
 /* ---------- index classes (Webflow combo classes) → stagger order / slot ---------- */
-.cv-1 { --i: 0; } .cv-2 { --i: 1; } .cv-3 { --i: 2; } .cv-4 { --i: 3; } .cv-5 { --i: 4; } .cv-6 { --i: 5; }
+.cv_visual .is-1 { --i: 0; } .cv_visual .is-2 { --i: 1; } .cv_visual .is-3 { --i: 2; } .cv_visual .is-4 { --i: 3; } .cv_visual .is-5 { --i: 4; } .cv_visual .is-6 { --i: 5; }
 /* dots + notes: --at = where along the line (0–1) the pen reaches them */
-.cv-dot.cv-1 { --at: 0; }    .cv-dot.cv-2 { --at: .233; } .cv-dot.cv-3 { --at: .447; }
-.cv-dot.cv-4 { --at: .652; } .cv-dot.cv-5 { --at: .849; } .cv-dot.cv-6 { --at: 1; }
-.cv-note.cv-1 { --note-i: 0; --at: .233; } .cv-note.cv-2 { --note-i: 1; --at: .652; } .cv-note.cv-3 { --note-i: 2; --at: .849; }
+.cv_dot.is-1 { --at: 0; }    .cv_dot.is-2 { --at: .233; } .cv_dot.is-3 { --at: .447; }
+.cv_dot.is-4 { --at: .652; } .cv_dot.is-5 { --at: .849; } .cv_dot.is-6 { --at: 1; }
+.cv_note.is-1 { --note-i: 0; --at: .233; } .cv_note.is-2 { --note-i: 1; --at: .652; } .cv_note.is-3 { --note-i: 2; --at: .849; }
 
 /* every animated element keeps its own GPU layer (will-change: transform, added next to each animation).
    Without it the browser drops the layer when an animation ends and redraws the text snapped to whole
    pixels — a visible sub-pixel jump as each piece lands. transform never blocks the glass blur. */
 /* paused until scrolled into view (IntersectionObserver removes it) */
-.cv-paused, .cv-paused * { animation-play-state: paused !important; }
+.is-cv-paused, .is-cv-paused * { animation-play-state: paused !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  .cv, .cv * { animation: none !important; }
+  .cv_visual, .cv_visual * { animation: none !important; }
 }
