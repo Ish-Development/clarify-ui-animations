@@ -1,6 +1,6 @@
 /* Clarify — "What Clarify does" tab visuals
-   Paste into Webflow: Site settings → Custom code → Head, inside <style>…</style>
-   (or page-level custom code on the pages that use the tabs).
+   Hosted: https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@1/clarify-tabs.min.css
+   Link it in Webflow: Site settings → Custom code → Head.
    Part 1 = how the visuals look · Part 2 = how they move. Pure CSS.
    Needs: .is-active on the open panel, data-tabs (+ data-prev-tab) on the tab root. See README. */
 

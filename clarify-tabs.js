@@ -1,5 +1,6 @@
 /* Clarify — tab visuals · WIRING (all motion is CSS)
-   Paste into Webflow: Site settings → Custom code → Footer (before </body>), inside <script>…</script>.
+   Hosted: https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@1/clarify-tabs.min.js
+   Link it in Webflow: Site settings → Custom code → Footer (before </body>).
    1. Count-up: reads each .cv-count's typed number into --to (and data-from into --from; 1–2 decimals OK),
       then flags the page .cv-ready.
    2. Fit: each visual sits in a .cv-frame that fills its panel; when the frame is smaller than the
