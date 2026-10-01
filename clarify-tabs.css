@@ -258,31 +258,31 @@
                       50% { opacity: 1; } 100% { transform: scale(1); text-shadow: 0 0 0 transparent; } }
 
 :is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-tile      { animation: cv-scale calc(.5s * var(--k)) var(--ease-in-out-cubic) backwards;
-                           animation-delay: calc(var(--t-tiles) + var(--i) * var(--stagger)); }
+                           animation-delay: calc(var(--t-tiles) + var(--i) * var(--stagger)); will-change: transform; }
 /* connector = one pen: stems (ease-in) → arms (linear) → drop (ease-out) ≈ in-out-cubic overall */
 .cv-seg { stroke-dasharray: 1; }
-:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-seg       { animation: cv-draw var(--dur) var(--seg-ease) backwards; animation-delay: var(--at); }
+:is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-seg       { animation: cv-draw var(--dur) var(--seg-ease) backwards; animation-delay: var(--at); will-change: transform; }
 .cv-seg-stem { --at: var(--t-connector);                          --dur: calc(.16s * var(--k)); --seg-ease: cubic-bezier(.55, 0, 1, .45); }
 .cv-seg-arm  { --at: calc(var(--t-connector) + .16s * var(--k));  --dur: calc(.26s * var(--k)); --seg-ease: linear; }
 .cv-seg-drop { --at: calc(var(--t-connector) + .42s * var(--k));  --dur: calc(.16s * var(--k)); --seg-ease: cubic-bezier(0, .55, .45, 1); }
 :is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-card      { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: var(--t-card); }
+                           animation-delay: var(--t-card); will-change: transform; }
 :is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-head      { animation: cv-fade calc(.4s * var(--k)) ease-out backwards;
-                           animation-delay: var(--t-head); }
+                           animation-delay: var(--t-head); will-change: transform; }
 :is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-grid,
 :is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-ticks     { animation: cv-fade calc(.4s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-head) + var(--stagger)); }
+                           animation-delay: calc(var(--t-head) + var(--stagger)); will-change: transform; }
 :is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-line      { animation: cv-wipe-right var(--draw) linear backwards;
-                           animation-delay: var(--draw-start); }
+                           animation-delay: var(--draw-start); will-change: transform; }
 :is([data-tabs]:not([data-prev-tab="2"]) .is-active .cv--enter, [data-tabs]:not([data-prev-tab="1"]) .is-active .cv--morph) .cv-dot       { animation: cv-pop calc(.5s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--draw-start) + var(--at) * var(--draw)); }
+                           animation-delay: calc(var(--draw-start) + var(--at) * var(--draw)); will-change: transform; }
 .is-active .cv-context   { animation: cv-fade calc(.6s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--settle) - .2s * var(--k)); }
+                           animation-delay: calc(var(--settle) - .2s * var(--k)); will-change: transform; }
 .is-active .cv-row       { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--settle) + var(--i) * var(--tail-stagger)); }
+                           animation-delay: calc(var(--settle) + var(--i) * var(--tail-stagger)); will-change: transform; }
 .is-active .cv-pill      { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(1s * var(--k)) ease-out;
                            animation-delay: calc(var(--settle) + var(--i) * var(--tail-stagger) + .15s * var(--k)),
-                                            calc(var(--settle) + var(--i) * var(--tail-stagger) + .3s * var(--k)); }
+                                            calc(var(--settle) + var(--i) * var(--tail-stagger) + .3s * var(--k)); will-change: transform; }
 
 /* ---------- tab 2: "morph" — card is already there, only the human layer arrives ---------- */
 .cv--morph {
@@ -302,15 +302,15 @@
 @keyframes cv-swap { from { opacity: 0; filter: blur(calc(6 * var(--cv-u))); } }
 
 .is-active .cv-swap      { animation: cv-swap calc(.5s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-swap) + var(--i) * var(--stagger)); }
+                           animation-delay: calc(var(--t-swap) + var(--i) * var(--stagger)); will-change: transform; }
 /* each note: tag pops → dashed line drops → dot turns Mist */
 .cv-note { --t: calc(var(--t-notes) + var(--note-i) * var(--note-gap)); }
 .is-active .cv-note-tag  { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: var(--t); }
+                           animation-delay: var(--t); will-change: transform; }
 .is-active .cv-note-line { animation: cv-wipe-down calc(.25s * var(--k)) var(--ease-in-out-cubic) backwards;
-                           animation-delay: calc(var(--t) + .12s * var(--k)); }
+                           animation-delay: calc(var(--t) + .12s * var(--k)); will-change: transform; }
 .is-active .cv-note-dot  { animation: cv-pop calc(.5s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--t) + .3s * var(--k)); }
+                           animation-delay: calc(var(--t) + .3s * var(--k)); will-change: transform; }
 
 /* ---------- tab 1 reached from tab 2: the reverse morph — card stays, the notes blur out,
    tiles + title swap back, rows re-slide. Tab 1 carries tab 2's notes (hidden) just for this. ---------- */
@@ -318,10 +318,10 @@
 .is-active .cv--enter .cv-note > * { animation: none; }          /* never pop in on tab 1 */
 [data-tabs][data-prev-tab="2"] .cv--enter { --settle: calc(.45s * var(--k)); }
 [data-tabs][data-prev-tab="2"] .is-active .cv--enter .cv-note { animation: cv-note-out calc(.35s * var(--k)) ease-in backwards;
-                           animation-delay: calc((2 - var(--note-i)) * .06s * var(--k)); }
+                           animation-delay: calc((2 - var(--note-i)) * .06s * var(--k)); will-change: transform; }
 [data-tabs][data-prev-tab="2"] .is-active .cv--enter .cv-tile > div,
 [data-tabs][data-prev-tab="2"] .is-active .cv--enter .cv-head { animation: cv-swap calc(.5s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--i, 3) * var(--stagger)); }
+                           animation-delay: calc(var(--i, 3) * var(--stagger)); will-change: transform; }
 @keyframes cv-note-out { from { opacity: 1; filter: none; } to { opacity: 0; filter: blur(calc(6 * var(--cv-u))); } }
 
 /* ---------- tab 3: agent fires — history is there, a new firing pushes in on top ---------- */
@@ -346,8 +346,8 @@
    copies it to --to and adds .cv-ready; then the text goes transparent and a CSS counter draws
    on top, right-aligned, so the unit never slides. */
 .cv-count { --n: var(--to); }
-.cv-ready .cv-count { color: transparent; counter-reset: n var(--n); }
-.cv-ready .cv-count::after { content: counter(n); position: absolute; top: 0; right: 0; color: var(--count-c, var(--text-primary)); }
+.cv-ready .cv-count { visibility: hidden; counter-reset: n var(--n); }   /* the typed number keeps its width but hides (checkers skip it); the counter shows */
+.cv-ready .cv-count::after { content: counter(n); position: absolute; top: 0; right: 0; color: var(--count-c, var(--text-primary)); visibility: visible; }
 /* decimals (e.g. 7.6, 1.47): the script counts in tenths / hundredths and adds .cv-dec1 / .cv-dec2;
    the counter is split into whole part + fraction around a "." */
 .cv-ready .cv-count.cv-dec1 { counter-reset: i round(down, calc(var(--n) / 10), 1) f mod(var(--n), 10); }
@@ -359,32 +359,32 @@
 .cv-flip-old { opacity: 0; }
 
 .is-active .cv--agent .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
-                                 animation-delay: var(--t-card); }
-.is-active .cv-ahead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); }
+                                 animation-delay: var(--t-card); will-change: transform; }
+.is-active .cv-ahead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
 .is-active .cv-live      { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--t-head) + .15s * var(--k)); }
-.is-active .cv-live i    { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); }
+                           animation-delay: calc(var(--t-head) + .15s * var(--k)); will-change: transform; }
+.is-active .cv-live i    { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); will-change: transform; }
 .is-active .cv-kpi       { animation: cv-rise calc(.6s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--t-kpis) + var(--i) * var(--stagger)); }
+                           animation-delay: calc(var(--t-kpis) + var(--i) * var(--stagger)); will-change: transform; }
 .is-active .cv-count     { animation: cv-count calc(.9s * var(--k)) cubic-bezier(.25, 1, .5, 1) backwards;
-                           animation-delay: calc(var(--t-kpis) + var(--i) * var(--stagger)); }
-.is-active .cv-flip-old  { animation: cv-out calc(.3s * var(--k)) ease-in backwards; animation-delay: var(--t-fire); }
+                           animation-delay: calc(var(--t-kpis) + var(--i) * var(--stagger)); will-change: transform; }
+.is-active .cv-flip-old  { animation: cv-out calc(.3s * var(--k)) ease-in backwards; animation-delay: var(--t-fire); will-change: transform; }
 .is-active .cv-flip-new  { animation: cv-swap calc(.4s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-fire) + .15s * var(--k)); }
-.is-active .cv-cols      { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-table); }
+                           animation-delay: calc(var(--t-fire) + .15s * var(--k)); will-change: transform; }
+.is-active .cv-cols      { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-table); will-change: transform; }
 .is-active .cv-history .cv-trow { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--t-table) + .1s * var(--k) + var(--i) * var(--tail-stagger)); }
-.is-active .cv-history   { animation: cv-push calc(.7s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-fire); }
+                           animation-delay: calc(var(--t-table) + .1s * var(--k) + var(--i) * var(--tail-stagger)); will-change: transform; }
+.is-active .cv-history   { animation: cv-push calc(.7s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-fire); will-change: transform; }
 .is-active .cv-trow--new { animation: cv-fade calc(.6s * var(--k)) ease-out backwards, cv-rowtint calc(1s * var(--k)) ease-out;
-                           animation-delay: calc(var(--t-fire) + .1s * var(--k)), calc(var(--t-match) + 4 * var(--match-gap)); }
+                           animation-delay: calc(var(--t-fire) + .1s * var(--k)), calc(var(--t-match) + 4 * var(--match-gap)); will-change: transform; }
 .is-active .cv-trow--new .cv-chip { animation: cv-match calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(.9s * var(--k)) ease-out;
-                           animation-delay: calc(var(--t-match) + var(--i) * var(--match-gap)), calc(var(--t-match) + var(--i) * var(--match-gap) + .1s * var(--k)); }
+                           animation-delay: calc(var(--t-match) + var(--i) * var(--match-gap)), calc(var(--t-match) + var(--i) * var(--match-gap) + .1s * var(--k)); will-change: transform; }
 .is-active .cv-trow--new .cv-lead { display: inline-block; animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--t-match) + 4 * var(--match-gap) + .05s * var(--k)); }
+                           animation-delay: calc(var(--t-match) + 4 * var(--match-gap) + .05s * var(--k)); will-change: transform; }
 .is-active .cv-trow--new .cv-status { animation: cv-swap calc(.4s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-match) + 4 * var(--match-gap) + .1s * var(--k)); }
+                           animation-delay: calc(var(--t-match) + 4 * var(--match-gap) + .1s * var(--k)); will-change: transform; }
 .is-active .cv-foot      { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-table) + .5s * var(--k)); }
+                           animation-delay: calc(var(--t-table) + .5s * var(--k)); will-change: transform; }
 
 /* ---------- tab 4: the firing arrives, then fans out to every destination ---------- */
 .cv--route {
@@ -398,23 +398,23 @@
 @keyframes cv-tog-bg { from { background-color: rgb(249 250 252 / .12); } }
 @keyframes cv-tog-kb { from { transform: translateX(calc(-12 * var(--cv-u))); background-color: var(--muted-2); } }
 
-.is-active .cv-event     { animation: cv-scale calc(.5s * var(--k)) var(--ease-in-out-cubic) backwards; animation-delay: var(--t-event); }
+.is-active .cv-event     { animation: cv-scale calc(.5s * var(--k)) var(--ease-in-out-cubic) backwards; animation-delay: var(--t-event); will-change: transform; }
 .is-active .cv-event .ai { display: inline-block; animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--t-event) + .25s * var(--k)); }
+                           animation-delay: calc(var(--t-event) + .25s * var(--k)); will-change: transform; }
 .is-active .cv-rconn path.cv-seg { animation: cv-draw calc(.3s * var(--k)) var(--ease-in-out-cubic) backwards;
-                           animation-delay: var(--t-link); }
+                           animation-delay: var(--t-link); will-change: transform; }
 .is-active .cv--route .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: var(--t-card); }
+                           animation-delay: var(--t-card); will-change: transform; }
 .is-active .cv-rhead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-card) + .15s * var(--k)); }
+                           animation-delay: calc(var(--t-card) + .15s * var(--k)); will-change: transform; }
 .is-active .cv-dest      { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--t-dests) + var(--i) * var(--stagger)); }
+                           animation-delay: calc(var(--t-dests) + var(--i) * var(--stagger)); will-change: transform; }
 .is-active .cv-toggle    { animation: cv-tog-bg calc(.3s * var(--k)) ease-out backwards, cv-bloom calc(.9s * var(--k)) ease-out;
-                           animation-delay: calc(var(--t-switch) + var(--i) * var(--switch-gap)), calc(var(--t-switch) + var(--i) * var(--switch-gap) + .2s * var(--k)); }
+                           animation-delay: calc(var(--t-switch) + var(--i) * var(--switch-gap)), calc(var(--t-switch) + var(--i) * var(--switch-gap) + .2s * var(--k)); will-change: transform; }
 .is-active .cv-toggle::after { animation: cv-tog-kb calc(.45s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--t-switch) + var(--i) * var(--switch-gap)); }
+                           animation-delay: calc(var(--t-switch) + var(--i) * var(--switch-gap)); will-change: transform; }
 .is-active .cv-add       { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-switch) + 6 * var(--switch-gap) + .1s * var(--k)); }
+                           animation-delay: calc(var(--t-switch) + 6 * var(--switch-gap) + .1s * var(--k)); will-change: transform; }
 
 /* ################################ HOW IT WORKS ################################ */
 /* ============================================================
@@ -449,19 +449,19 @@
   --t-rows:  calc(.55s * var(--k));     /* lines start streaming in */
   --tail:    calc(1.44s * var(--k));    /* 6 lines, .24s apart */
 }
-.is-active .cv--tail .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); }
-.is-active .cv-thead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); }
-.is-active .cv-stream i::after { animation: cv-beat 1.2s ease-in-out infinite; }
-.is-active .cv-stream i  { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: var(--t-rows); }
+.is-active .cv--tail .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
+.is-active .cv-thead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
+.is-active .cv-stream i::after { animation: cv-beat 1.2s ease-in-out infinite; will-change: transform; }
+.is-active .cv-stream i  { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: var(--t-rows); will-change: transform; }
 /* the signal count ticks up while lines arrive (start value: data-from on the number) */
-.is-active .cv--tail .cv-count { animation: cv-count var(--tail) linear backwards; animation-delay: var(--t-rows); }
-.is-active .cv-tail      { animation: cv-tail-push var(--tail) linear backwards; animation-delay: var(--t-rows); }
-.is-active .cv-tline.cv-1 { animation: cv-tail-1 var(--tail) linear backwards; animation-delay: var(--t-rows); }
-.is-active .cv-tline.cv-2 { animation: cv-tail-2 var(--tail) linear backwards; animation-delay: var(--t-rows); }
-.is-active .cv-tline.cv-3 { animation: cv-tail-3 var(--tail) linear backwards; animation-delay: var(--t-rows); }
-.is-active .cv-tline.cv-4 { animation: cv-tail-4 var(--tail) linear backwards; animation-delay: var(--t-rows); }
-.is-active .cv-tline.cv-5 { animation: cv-tail-5 var(--tail) linear backwards; animation-delay: var(--t-rows); }
-.is-active .cv-tline.cv-6 { animation: cv-tail-6 var(--tail) linear backwards; animation-delay: var(--t-rows); }
+.is-active .cv--tail .cv-count { animation: cv-count var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv-tail      { animation: cv-tail-push var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv-tline.cv-1 { animation: cv-tail-1 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv-tline.cv-2 { animation: cv-tail-2 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv-tline.cv-3 { animation: cv-tail-3 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv-tline.cv-4 { animation: cv-tail-4 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv-tline.cv-5 { animation: cv-tail-5 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
+.is-active .cv-tline.cv-6 { animation: cv-tail-6 var(--tail) linear backwards; animation-delay: var(--t-rows); will-change: transform; }
 
 @keyframes cv-beat { 50% { transform: scale(.7); } }
 @keyframes cv-ping-sage { 0% { box-shadow: 0 0 0 0 rgb(162 208 193 / .45); } 100% { box-shadow: 0 0 0 calc(6 * var(--cv-u)) rgb(162 208 193 / 0); } }
@@ -596,33 +596,33 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
   --eval-gap: calc(.30s * var(--k));
 }
 .cv-mrow.cv-1 { --met: 3; } .cv-mrow.cv-2 { --met: 2; } .cv-mrow.cv-3 { --met: 1; }
-.is-active .cv--expr .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); }
-.is-active .cv-ehead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); }
-.is-active .cv--expr .cv-live { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards; animation-delay: calc(var(--t-head) + .15s * var(--k)); }
-.is-active .cv--expr .cv-live i { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); }
-.is-active .cv-code      { animation: cv-fade calc(.4s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-code) - .1s * var(--k)); }
+.is-active .cv--expr .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
+.is-active .cv-ehead     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
+.is-active .cv--expr .cv-live { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards; animation-delay: calc(var(--t-head) + .15s * var(--k)); will-change: transform; }
+.is-active .cv--expr .cv-live i { animation: cv-breathe 2.4s ease-in-out infinite; animation-delay: calc(var(--t-head) + .6s * var(--k)); will-change: transform; }
+.is-active .cv-code      { animation: cv-fade calc(.4s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-code) - .1s * var(--k)); will-change: transform; }
 /* words float in (keyword → field → value), line by line */
 .cv-tok:nth-child(1) { --w: 0; } .cv-tok:nth-child(2) { --w: 1; } .cv-tok:nth-child(3) { --w: 2; }
 .is-active .cv-tok       { animation: cv-word calc(.55s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--t-code) + var(--i) * var(--line-gap) + var(--w) * .07s * var(--k)); }
+                           animation-delay: calc(var(--t-code) + var(--i) * var(--line-gap) + var(--w) * .07s * var(--k)); will-change: transform; }
 /* when a line is checked, a Mauve shimmer sweeps across it */
 .is-active .cv-cline     { animation: cv-shimmer calc(.7s * var(--k)) ease-in-out;
-                           animation-delay: calc(var(--t-eval) + var(--i) * var(--eval-gap)); }
-.is-active .cv-match > .cv-eyebrow { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-rows) - .1s * var(--k)); }
+                           animation-delay: calc(var(--t-eval) + var(--i) * var(--eval-gap)); will-change: transform; }
+.is-active .cv-match > .cv-eyebrow { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-rows) - .1s * var(--k)); will-change: transform; }
 .is-active .cv-mrow      { animation: cv-slide-soft calc(.7s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--t-rows) + var(--i) * var(--stagger)); }
+                           animation-delay: calc(var(--t-rows) + var(--i) * var(--stagger)); will-change: transform; }
 /* the row that fires gets a brief tint, so the eye lands on it */
 .is-active .cv-mrow.cv-1 { animation: cv-slide-soft calc(.7s * var(--k)) var(--ease-settle) backwards, cv-rowtint calc(1s * var(--k)) ease-out;
-                           animation-delay: calc(var(--t-rows) + var(--i) * var(--stagger)), calc(var(--t-eval) + 2 * var(--eval-gap) + .2s * var(--k)); }
+                           animation-delay: calc(var(--t-rows) + var(--i) * var(--stagger)), calc(var(--t-eval) + 2 * var(--eval-gap) + .2s * var(--k)); will-change: transform; }
 /* a condition mark springs full (with a glow) when its expression line is checked; "x of 3" ticks with it */
 .is-active .cv-mark.met::after { animation: cv-mark calc(.6s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--t-eval) + var(--i) * var(--eval-gap)); }
+                           animation-delay: calc(var(--t-eval) + var(--i) * var(--eval-gap)); will-change: transform; }
 .is-active .cv-mrow .cv-count { animation: cv-count calc(var(--met) * var(--eval-gap)) steps(var(--met), jump-start) backwards;
-                           animation-delay: var(--t-eval); }
+                           animation-delay: var(--t-eval); will-change: transform; }
 .is-active .cv-fired     { animation: cv-spring calc(.6s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(1.1s * var(--k)) ease-out;
-                           animation-delay: calc(var(--t-eval) + 2 * var(--eval-gap) + .25s * var(--k)), calc(var(--t-eval) + 2 * var(--eval-gap) + .35s * var(--k)); }
+                           animation-delay: calc(var(--t-eval) + 2 * var(--eval-gap) + .25s * var(--k)), calc(var(--t-eval) + 2 * var(--eval-gap) + .35s * var(--k)); will-change: transform; }
 .is-active .cv-efoot     { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-eval) + 3 * var(--eval-gap) + .3s * var(--k)); }
+                           animation-delay: calc(var(--t-eval) + 3 * var(--eval-gap) + .3s * var(--k)); will-change: transform; }
 @keyframes cv-word     { from { opacity: 0; transform: translateY(calc(4 * var(--cv-u))); filter: blur(calc(6 * var(--cv-u))); } }
 @keyframes cv-slide-soft { from { opacity: 0; transform: translateX(calc(-10 * var(--cv-u))); filter: blur(calc(6 * var(--cv-u))); } }
 @keyframes cv-shimmer  { 0% { background-position: 100% 0; background-color: rgb(218 183 214 / 0); }
@@ -692,29 +692,29 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
   --flow:    calc(.48s * var(--k));     /* fill duration = the rest of the step */
 }
 .cv-phase.cv-1 { --at-ev: 0; } .cv-phase.cv-2 { --at-ev: 2; } .cv-phase.cv-3 { --at-ev: 4; }   /* Detected · Routed (paged) · Handled */
-.is-active .cv--act .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); }
-.is-active .cv-acthead .title { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); }
+.is-active .cv--act .cv-card { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t-card); will-change: transform; }
+.is-active .cv-acthead .title { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: var(--t-head); will-change: transform; }
 .is-active .cv-phase     { animation: cv-pill calc(.5s * var(--k)) var(--ease-settle) backwards, cv-pending calc(.45s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-head) + var(--i) * var(--stagger)), calc(var(--t-ev) + var(--at-ev) * var(--ev-gap) + .1s * var(--k)); }
+                           animation-delay: calc(var(--t-head) + var(--i) * var(--stagger)), calc(var(--t-ev) + var(--at-ev) * var(--ev-gap) + .1s * var(--k)); will-change: transform; }
 .is-active .cv-phase .ck { --glyph-glow: var(--glow-sage); animation: cv-pop-glyph calc(.55s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--t-ev) + var(--at-ev) * var(--ev-gap) + .1s * var(--k)); }
+                           animation-delay: calc(var(--t-ev) + var(--at-ev) * var(--ev-gap) + .1s * var(--k)); will-change: transform; }
 .is-active .cv-sep       { animation: cv-wipe-right calc(.3s * var(--k)) var(--ease-in-out-cubic) backwards;
-                           animation-delay: calc(var(--t-head) + .3s * var(--k) + var(--i) * var(--stagger)); }
+                           animation-delay: calc(var(--t-head) + .3s * var(--k) + var(--i) * var(--stagger)); will-change: transform; }
 .is-active .cv-ev .cv-node { animation: cv-pop calc(.55s * var(--k)) var(--ease-spring) backwards;
-                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap)); }
+                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap)); will-change: transform; }
 .is-active .cv-ev .content { animation: cv-slide calc(.7s * var(--k)) var(--ease-settle) backwards;
-                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .06s * var(--k)); }
+                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .06s * var(--k)); will-change: transform; }
 .is-active .cv-ev .line  { animation: cv-fade calc(.3s * var(--k)) ease-out backwards;
-                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .15s * var(--k)); }
+                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .15s * var(--k)); will-change: transform; }
 .is-active .cv-ev .line::after  { animation: cv-fill var(--flow) var(--ease-in-out-cubic) backwards;
-                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + var(--t-flow)); }
+                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + var(--t-flow)); will-change: transform; }
 .is-active .cv-ev .line::before { animation: cv-tip var(--flow) var(--ease-in-out-cubic) backwards;
-                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + var(--t-flow)); }
+                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + var(--t-flow)); will-change: transform; }
 .is-active .cv-badge     { animation: cv-pill calc(.55s * var(--k)) var(--ease-spring) backwards, cv-bloom calc(.9s * var(--k)) ease-out;
-                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .3s * var(--k)), calc(var(--t-ev) + var(--i) * var(--ev-gap) + .4s * var(--k)); }
+                           animation-delay: calc(var(--t-ev) + var(--i) * var(--ev-gap) + .3s * var(--k)), calc(var(--t-ev) + var(--i) * var(--ev-gap) + .4s * var(--k)); will-change: transform; }
 /* the outcome: "handled in 2 min" arrives with the last event, then the footer */
-.is-active .cv-took      { animation: cv-swap calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .2s * var(--k)); }
-.is-active .cv-actfoot   { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .45s * var(--k)); }
+.is-active .cv-took      { animation: cv-swap calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .2s * var(--k)); will-change: transform; }
+.is-active .cv-actfoot   { animation: cv-fade calc(.5s * var(--k)) ease-out backwards; animation-delay: calc(var(--t-ev) + 4 * var(--ev-gap) + .45s * var(--k)); will-change: transform; }
 @keyframes cv-pending { from { opacity: .45; } }
 @keyframes cv-fill { from { transform: scaleY(0); } }
 @keyframes cv-tip  { 0% { top: 0; opacity: 1; } 85% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
@@ -756,14 +756,14 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
    slot; the newer one (cv-1) drops in on top and pushes it down — like a real lock screen. */
 .cv--notify { --t-phone: 0s; --t-first: calc(.75s * var(--k)); --t-second: calc(1.55s * var(--k)); }
 .is-active .cv--notify .phone { animation: cv-phone-in calc(.9s * var(--k)) var(--ease-settle) backwards;
-                               animation-delay: calc(var(--t0, 0s) + var(--t-phone)); }
-.is-active .cv--notify .glow  { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); }
+                               animation-delay: calc(var(--t0, 0s) + var(--t-phone)); will-change: transform; }
+.is-active .cv--notify .glow  { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
 /* the older alert: lands in the top slot (calc(62.7 * var(--cv-u)) above its final spot), then gets pushed down */
 .is-active .cv-ios.cv-2 { animation: cv-ios-first calc(1.25s * var(--k)) linear backwards;
-                          animation-delay: calc(var(--t0, 0s) + var(--t-first)); }
+                          animation-delay: calc(var(--t0, 0s) + var(--t-first)); will-change: transform; }
 /* the newer alert: drops in from above with a spring */
 .is-active .cv-ios.cv-1 { animation: cv-ios-drop calc(.6s * var(--k)) var(--ease-spring) backwards;
-                          animation-delay: calc(var(--t0, 0s) + var(--t-second)); }
+                          animation-delay: calc(var(--t0, 0s) + var(--t-second)); will-change: transform; }
 @keyframes cv-glow-in { from { opacity: 0; } }
 /* the phone just rises into place (no grow); the alerts keep their springy pop */
 @keyframes cv-phone-in { from { opacity: 0; transform: translateY(calc(16 * var(--cv-u))); filter: blur(calc(10 * var(--cv-u))); } }
@@ -815,27 +815,27 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
    avatar), then the answer streams in line by line; you send the follow-up. Messages rise into place like a real chat. */
 .cv--ask { --t-q1: calc(.55s * var(--k)); --t-ai: calc(1.3s * var(--k)); --t-ans: calc(2.35s * var(--k));
            --t-q2: calc(3.3s * var(--k)); }
-.is-active .cv--ask .glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); }
-.is-active .cv-compose    { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); }
+.is-active .cv--ask .glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
+.is-active .cv-compose    { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); will-change: transform; }
 .cv-msg.cv-1 { --at: var(--t-q1); } .cv-msg.cv-2 { --at: var(--t-ai); } .cv-msg.cv-3 { --at: var(--t-q2); }
 .is-active .cv-msg        { animation: cv-settle calc(.8s * var(--k)) var(--ease-settle) backwards;
-                            animation-delay: calc(var(--t0, 0s) + var(--at)); }
+                            animation-delay: calc(var(--t0, 0s) + var(--at)); will-change: transform; }
 .is-active .cv-msg:not(.cv-msg--ai) .said { animation: cv-fade calc(.5s * var(--k)) ease-out backwards;
-                            animation-delay: calc(var(--t0, 0s) + var(--at) + .2s * var(--k)); }
+                            animation-delay: calc(var(--t0, 0s) + var(--at) + .2s * var(--k)); will-change: transform; }
 /* send button presses just before each of your messages goes up */
 .is-active .cv-compose .send { animation: cv-press calc(.45s * var(--k)) ease-out backwards, cv-press calc(.45s * var(--k)) ease-out backwards;
-  animation-delay: calc(var(--t0, 0s) + var(--t-q1) - .2s * var(--k)), calc(var(--t0, 0s) + var(--t-q2) - .2s * var(--k)); }
+  animation-delay: calc(var(--t0, 0s) + var(--t-q1) - .2s * var(--k)), calc(var(--t0, 0s) + var(--t-q2) - .2s * var(--k)); will-change: transform; }
 /* Clarify thinks … */
 .is-active .cv-think      { animation: cv-think calc(var(--t-ans) - var(--t-ai)) linear backwards;
-                            animation-delay: calc(var(--t0, 0s) + var(--t-ai)); }
-.is-active .cv-think i    { animation: cv-bob calc(.6s * var(--k)) ease-in-out 3; animation-delay: calc(var(--t0, 0s) + var(--t-ai) + var(--i) * .12s * var(--k)); }
+                            animation-delay: calc(var(--t0, 0s) + var(--t-ai)); will-change: transform; }
+.is-active .cv-think i    { animation: cv-bob calc(.6s * var(--k)) ease-in-out 3; animation-delay: calc(var(--t0, 0s) + var(--t-ai) + var(--i) * .12s * var(--k)); will-change: transform; }
 .cv-think i:nth-child(2) { --i: 1; } .cv-think i:nth-child(3) { --i: 2; }
 .cv-think i:first-child { --i: 0; }
 .is-active .cv-msg--ai .av { --breathe: var(--glow-mauve); animation: cv-breathe calc(.9s * var(--k)) ease-in-out 2;
-                            animation-delay: calc(var(--t0, 0s) + var(--t-ai) + .1s * var(--k)); }
+                            animation-delay: calc(var(--t0, 0s) + var(--t-ai) + .1s * var(--k)); will-change: transform; }
 /* … then answers, streaming top to bottom */
 .is-active .cv-msg--ai .said { animation: cv-stream calc(.9s * var(--k)) ease-out backwards;
-                            animation-delay: calc(var(--t0, 0s) + var(--t-ans)); }
+                            animation-delay: calc(var(--t0, 0s) + var(--t-ans)); will-change: transform; }
 @keyframes cv-press  { 0% { transform: scale(1); } 35% { transform: scale(.82); box-shadow: 0 0 0 0 var(--glow-mist); }
                        100% { transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--cv-u)) rgb(255 255 255 / 0); } }
 @keyframes cv-think  { 0% { opacity: 0; } 12% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; } }
@@ -867,7 +867,7 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 .cv-shell .top { height: calc(35.3 * var(--cv-u)); box-sizing: border-box; padding: 0 calc(14.7 * var(--cv-u)); display: flex; align-items: baseline; gap: calc(6.3 * var(--cv-u));
   padding-top: calc(11.5 * var(--cv-u)); border-bottom: .5px solid var(--glass-line); }
 .cv-shell .top .h { font-size: calc(9.4 * var(--cv-u)); line-height: calc(12 * var(--cv-u)); font-weight: 600; color: var(--text-primary); }
-.cv-shell .top .scope { font-family: var(--font-mono); font-size: calc(5.2 * var(--cv-u)); letter-spacing: .1em; color: rgb(249 250 252 / .45); }
+.cv-shell .top .scope { font-family: var(--font-mono); font-size: calc(5.2 * var(--cv-u)); letter-spacing: .1em; color: rgb(249 250 252 / .6); }   /* .6 = passes 4.5:1 (was .45) */
 .cv-shell .body { padding: calc(12.6 * var(--cv-u)) calc(14.7 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(6.3 * var(--cv-u)); }
 .cv-q { height: calc(27.9 * var(--cv-u)); box-sizing: border-box; padding: 0 calc(8.4 * var(--cv-u)); display: flex; align-items: center; gap: calc(6.3 * var(--cv-u));
   border: .5px solid var(--glass-line); border-radius: calc(6.3 * var(--cv-u)); font-family: var(--font-mono); font-size: calc(6.3 * var(--cv-u)); line-height: calc(8 * var(--cv-u)); }
@@ -883,8 +883,8 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 .cv-kpis .l { font-size: calc(6.8 * var(--cv-u)); line-height: calc(9 * var(--cv-u)); color: rgb(249 250 252 / .7); }
 .cv-kpis .v { font-family: var(--font-mono); font-size: calc(16.8 * var(--cv-u)); line-height: calc(21 * var(--cv-u)); font-weight: 500; color: var(--text-primary); }
 .cv--build .dl { display: flex; gap: calc(3.1 * var(--cv-u)); font-family: var(--font-mono); font-size: calc(5.8 * var(--cv-u)); line-height: calc(7 * var(--cv-u)); }
-.cv--build .dl .up { color: var(--sage-600); } .cv--build .dl .flat { color: rgb(249 250 252 / .35); }
-.cv--build .dl .n { color: rgb(249 250 252 / .4); }
+.cv--build .dl .up { color: var(--sage-600); } .cv--build .dl .flat { color: rgb(249 250 252 / .55); }
+.cv--build .dl .n { color: rgb(249 250 252 / .55); }   /* .55 = passes 4.5:1 contrast (was .4) */
 .cv-panel { box-sizing: border-box; height: calc(217.7 * var(--cv-u)); padding: calc(13.6 * var(--cv-u)); display: flex; flex-direction: column; gap: calc(9.4 * var(--cv-u)); }
 .cv-panel .chrome { display: flex; align-items: center; gap: calc(6.3 * var(--cv-u)); }
 .cv-panel .badge { width: calc(17.8 * var(--cv-u)); height: calc(17.8 * var(--cv-u)); box-sizing: border-box; border-radius: calc(6.3 * var(--cv-u)); background: rgb(249 250 252 / .04);
@@ -903,7 +903,8 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 .cv-panel .grid path { fill: none; stroke: rgb(139 139 139 / .2); stroke-width: .52; }
 .cv-panel .grid .min { stroke: rgb(227 135 125 / .4); stroke-dasharray: 1.6 1.6; }
 /* the lines: only the part the card shows (calc(256 * var(--cv-u))) is drawn */
-.cv-lines { position: absolute; left: calc(23 * var(--cv-u)); top: 0; width: calc(256 * var(--cv-u)); height: calc(100 * var(--cv-u)); }
+.cv-lines { position: absolute; left: calc(23 * var(--cv-u)); top: 0; width: calc(256 * var(--cv-u)); height: calc(100 * var(--cv-u));
+  clip-path: inset(calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) 0); }   /* = where the wipe ends, so nothing pops when it finishes */
 .cv-lines svg { width: calc(256 * var(--cv-u)); height: calc(100 * var(--cv-u)); display: block; overflow: visible; }
 .cv-lines path { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: .63; }
 .cv-lines .p4 { stroke: var(--sage-600); stroke-width: .84; } .cv-lines .p1 { stroke: #8fb6d8; }
@@ -912,12 +913,12 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 /* Build motion: the app settles in already filled; only the data moves — the numbers count up
    and the lines draw. */
 .cv--build { --t-data: calc(.45s * var(--k)); --t-draw: calc(.55s * var(--k)); --draw-b: calc(1.3s * var(--k)); }
-.is-active .cv--build .glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); }
-.is-active .cv-shell      { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); }
+.is-active .cv--build .glow { animation: cv-glow-in calc(1.2s * var(--k)) ease-out backwards; animation-delay: var(--t0, 0s); will-change: transform; }
+.is-active .cv-shell      { animation: cv-settle calc(.9s * var(--k)) var(--ease-settle) backwards; animation-delay: var(--t0, 0s); will-change: transform; }
 .is-active .cv--build .cv-count { animation: cv-count calc(.9s * var(--k)) cubic-bezier(.25, 1, .5, 1) backwards;
-                            animation-delay: calc(var(--t0, 0s) + var(--t-data) + var(--i, 0) * .08s * var(--k)); }
+                            animation-delay: calc(var(--t0, 0s) + var(--t-data) + var(--i, 0) * .08s * var(--k)); will-change: transform; }
 .cv-kpis .kpi.cv-1 .cv-count { --i: 0; } .cv-kpis .kpi.cv-2 .cv-count { --i: 1; } .cv-panel .stat .cv-count { --i: 2; }
-.is-active .cv-lines      { animation: cv-wipe-plot var(--draw-b) linear backwards; animation-delay: calc(var(--t0, 0s) + var(--t-draw)); }
+.is-active .cv-lines      { animation: cv-wipe-plot var(--draw-b) linear backwards; animation-delay: calc(var(--t0, 0s) + var(--t-draw)); will-change: transform; }
 /* no left overhang, or the round line caps would show as dots before the draw */
 @keyframes cv-wipe-plot { from { clip-path: inset(calc(-4 * var(--cv-u)) 100% calc(-4 * var(--cv-u)) 0); } to { clip-path: inset(calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) calc(-4 * var(--cv-u)) 0); } }
 
@@ -935,6 +936,9 @@ html:not(.cv-ready) .cv-mrow .cv-cond .cv-count { color: var(--count-c); }   /* 
 .cv-dot.cv-4 { --at: .652; } .cv-dot.cv-5 { --at: .849; } .cv-dot.cv-6 { --at: 1; }
 .cv-note.cv-1 { --note-i: 0; --at: .233; } .cv-note.cv-2 { --note-i: 1; --at: .652; } .cv-note.cv-3 { --note-i: 2; --at: .849; }
 
+/* every animated element keeps its own GPU layer (will-change: transform, added next to each animation).
+   Without it the browser drops the layer when an animation ends and redraws the text snapped to whole
+   pixels — a visible sub-pixel jump as each piece lands. transform never blocks the glass blur. */
 /* paused until scrolled into view (IntersectionObserver removes it) */
 .cv-paused, .cv-paused * { animation-play-state: paused !important; }
 
