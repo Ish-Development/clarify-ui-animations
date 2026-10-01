@@ -21,7 +21,7 @@ Footer (before `</body>`):
 
 ## Images
 
-- `assets/phone-lockscreen@3x.png` (Built to extend, card 1)
-- `assets/chat-avatar@3x.png` (Built to extend, card 2)
+- `assets/phone-lockscreen@3x.webp` (Built to extend, card 1)
+- `assets/chat-avatar@3x.webp` (Built to extend, card 2)
 
 `https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@1/assets/<file>`
