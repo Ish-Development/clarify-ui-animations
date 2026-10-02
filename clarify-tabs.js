@@ -1,7 +1,7 @@
 /* Clarify — section visuals · WIRING (all motion is CSS)
-   Hosted: https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@2/clarify-tabs.min.js
+   Hosted: https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@3/clarify-tabs.min.js
    Link it in Webflow: Site settings → Custom code → Footer (before </body>).
-   1. Count-up: reads each .cv_count's typed number into --to (and data-from into --from; 1–2 decimals OK),
+   1. Count-up: reads each .cv_count's typed number into --to (and data-cv-from into --from; 1–2 decimals OK),
       then flags the page .is-cv-ready.
    2. Play:
       · [data-cv="tabs"] (desktop/tablet): visuals wait until the wrapper scrolls into view; after that
@@ -20,7 +20,7 @@
       if (!isNaN(n)) el.style.setProperty("--to", n);
       var dp = (el.textContent.match(/\.(\d+)/) || ["", ""])[1].length;   // 7.6 → counts 0…76 in tenths
       if (dp === 1 || dp === 2) el.classList.add("is-dec" + dp);
-      if (el.dataset.from) el.style.setProperty("--from", parseInt(el.dataset.from, 10));   // optional start value
+      if (el.dataset.cvFrom) el.style.setProperty("--from", parseInt(el.dataset.cvFrom, 10));   // optional start value
     });
     document.documentElement.classList.add("is-cv-ready");
   }
@@ -39,7 +39,7 @@
   function armStacked(root) {
     root.classList.remove("is-cv-paused");
     root.classList.add("is-cv-stacked");
-    root.querySelectorAll(".cv_frame").forEach(function (frame) {
+    root.querySelectorAll(".cv_component").forEach(function (frame) {
       frame.classList.add("is-active", "is-cv-paused");
       if (!("IntersectionObserver" in window)) { frame.classList.remove("is-cv-paused"); return; }
       new IntersectionObserver(function (entries, io) {
@@ -53,7 +53,7 @@
 
   // Group: every visual is armed and they all start together once the section is in view
   function armGroup(root) {
-    var frames = root.querySelectorAll(".cv_frame");
+    var frames = root.querySelectorAll(".cv_component");
     frames.forEach(function (f) { f.classList.add("is-active", "is-cv-paused"); });
     var go = function () { frames.forEach(function (f) { f.classList.remove("is-cv-paused"); }); root.classList.add("is-cv-played"); };
     if (!("IntersectionObserver" in window)) return go();
