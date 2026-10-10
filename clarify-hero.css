@@ -22,8 +22,8 @@
    Card text stays white (100% / 60%): ≥ 4.5:1 on the glass over the brightest frames.
 
    Motion = the tab 4 alert card (.tv_event) in clarify-tabs.css, on one 8 s loop (= the video):
-     · cards = tv-scale: opacity 0 + scale .9 + blur 8 → none, .5 s cubic-bezier(.65,0,.35,1), at 1.0 / 2.8 / 4.6 s
-     · the "!" badge = tv-pop: from 0 on the spring cubic-bezier(.34,1.56,.64,1), .55 s, .25 s after its card,
+     · cards = snap: opacity 0 + scale .94 + blur 6 → none, .3 s cubic-bezier(.16,1,.3,1), at 0.8 / 1.8 / 2.8 s
+     · the "!" badge = pop: from 0 on the spring cubic-bezier(.34,1.56,.64,1), .4 s, .1 s after its card,
        with a short Mauve glow ring (its only colour)
      · exit = tv-out: opacity + blur 6, .3 s ease-in, at 7.2 / 7.28 / 7.35 s, top card first. Nothing drops from above.
      · fill-mode backwards, will-change: transform on every animated element; reduced motion = the final frame.
@@ -62,6 +62,7 @@
   --font-mono: var(--_typography---font--secondary-family, 'Geist Mono'), ui-monospace, monospace;
   --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ---------- Frame: covers the media box (the parent owns the size) ---------- */
@@ -182,7 +183,7 @@
      "!"   = tv-pop: scale 0 → 1 (opacity in by half-way), .55 s spring cubic-bezier(.34,1.56,.64,1), .25 s after its
              card; Mauve glow ring 0 → 6 px fading out over the same .55 s
      exit  = tv-out: opacity + blur 6, .3 s ease-in
-   Card n starts at s = 1.0 / 2.8 / 4.6 s (with the video). Percent = seconds / 8. */
+   Card n starts at s = 0.8 / 1.8 / 2.8 s. Percent = seconds / 8. */
 .wf-design-mode .hv_visual,
 .wf-design-mode .hv_visual * { animation: none !important; }
 
@@ -204,41 +205,42 @@
 .hv_component.is-paused .hv_card,
 .hv_component.is-paused .hv_card_icon { animation-play-state: paused; }
 
-/* card: scale in s → s + .5, hold, out (.3 s) at 7.2 / 7.28 / 7.35 s.
+/* card: snaps in over 0.3 s from 94 % + blur 6 (fast-start ease-out), lands at 0.8 / 1.8 / 2.8 s, out (0.2 s)
+   at 7.2 / 7.26 / 7.32 s. Faster and snappier than the tab cards on purpose (user, 2026-10-10).
    The hold says filter: none, so no filter sits on the glass (a held filter kills its backdrop blur). */
 @keyframes hv-card-1 {
-  0%, 12.5% { opacity: 0; transform: scale(0.9); filter: blur(calc(8 * var(--hv-u))); animation-timing-function: var(--ease-in-out-cubic); }
-  18.75% { opacity: 1; transform: none; filter: none; }
+  0%, 10% { opacity: 0; transform: scale(0.94); filter: blur(calc(6 * var(--hv-u))); animation-timing-function: var(--ease-snap); }
+  13.75% { opacity: 1; transform: none; filter: none; }
   90% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
-  93.75%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
+  92.5%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
 }
 @keyframes hv-card-2 {
-  0%, 35% { opacity: 0; transform: scale(0.9); filter: blur(calc(8 * var(--hv-u))); animation-timing-function: var(--ease-in-out-cubic); }
-  41.25% { opacity: 1; transform: none; filter: none; }
-  91% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
-  94.75%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
+  0%, 22.5% { opacity: 0; transform: scale(0.94); filter: blur(calc(6 * var(--hv-u))); animation-timing-function: var(--ease-snap); }
+  26.25% { opacity: 1; transform: none; filter: none; }
+  90.75% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
+  93.25%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
 }
 @keyframes hv-card-3 {
-  0%, 57.5% { opacity: 0; transform: scale(0.9); filter: blur(calc(8 * var(--hv-u))); animation-timing-function: var(--ease-in-out-cubic); }
-  63.75% { opacity: 1; transform: none; filter: none; }
-  91.875% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
-  95.625%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
+  0%, 35% { opacity: 0; transform: scale(0.94); filter: blur(calc(6 * var(--hv-u))); animation-timing-function: var(--ease-snap); }
+  38.75% { opacity: 1; transform: none; filter: none; }
+  91.5% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
+  94%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
 }
-/* "!" badge: tv-pop from s + .25 to s + .8 */
+/* "!" badge: spring pop 0.4 s, 0.1 s after its card */
 @keyframes hv-icon-1 {
-  0%, 15.625% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
-  19.0625% { opacity: 1; }
-  22.5%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
+  0%, 11.25% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
+  13.75% { opacity: 1; }
+  16.25%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
 }
 @keyframes hv-icon-2 {
-  0%, 38.125% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
-  41.5625% { opacity: 1; }
-  45%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
+  0%, 23.75% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
+  26.25% { opacity: 1; }
+  28.75%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
 }
 @keyframes hv-icon-3 {
-  0%, 60.625% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
-  64.0625% { opacity: 1; }
-  67.5%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
+  0%, 36.25% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
+  38.75% { opacity: 1; }
+  41.25%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
 }
 
 /* Reduced motion = the final state (all cards in place, static). The video library keeps the poster up. */
