@@ -164,8 +164,8 @@
   white-space: nowrap;
 }
 
-/* ---------- Phone (≤ 48em): all three cards stacked like desktop, centred; from 10% down the 394 × 493 band, home y 133
-   of 393 × 852. (User 2026-10-10: three cards, not Figma's single card.) ---------- */
+/* ---------- Phone (≤ 48em): the first two cards stacked like desktop, centred; from 10% down the 394 × 493 band, home
+   y 133 of 393 × 852. (User 2026-10-10: max two cards on phone so they don't cover the hero.) ---------- */
 @container (width <= 48em) {
   .hv_visual { --hv-u: min(100cqw / 394, 1.27px); }
   .hv_stack, .hv_component.is-home .hv_stack {
@@ -175,6 +175,7 @@
     top: calc(49 * var(--hv-u));
   }
   .hv_component.is-home .hv_stack { top: calc(133 * var(--hv-u)); }
+  .hv_card.is-3 { display: none; }
 }
 
 /* ---------- Motion: one 8 s loop, restarted by the site script with the video ---------- */
