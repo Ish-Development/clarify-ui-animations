@@ -8,23 +8,24 @@
    ([data-video="component"], one data-hv-video="desktop" 16:9, one data-hv-video="phone" 9:16) and a Code Embed with
    .hv_component > .hv_visual (aria-hidden) > .hv_stack > .hv_card × 3. Replaces the Designer-built card_nt_* list.
 
-   Layout switches at 48em with container queries (like the site): ≤ 48em shows the phone video and card 1 only.
+   Layout switches at 48em with container queries (the site's threshold, as its observeContainer('(width > 48em)')):
+   ≤ 48em = only the phone (9:16) video component + card 1; > 48em = only the desktop (16:9) component + 3 cards.
+   The other component is display: none, so it never intersects and the video library never loads or plays it.
 
    Alert colour = the Mauve family the tab visuals use for fired events / alerts (tv_match_fired, tv_trow_chip),
    so the heroes and the sections below speak one colour (user, 2026-10-10: mauve instead of red in the heroes too).
    Hard-coded like tv_/cv_ (visuals don't bind to the design system):
      #ecdcea                 Mauve 150   "!" badge fill, solid (lightened from Mauve 300 #dab7d6)
-     #583c56                 Mauve ink   "!" glyph on the badge, 5.3:1
+     #583c56                 Mauve ink   "!" glyph on the badge, 7.3:1
      rgb(218 183 214 / .6)   Mauve 300   badge pop glow + ring (= --glow-mauve in tv_/cv_)
-     rgb(88 60 86 / .55)     Mauve ink   card body wash for ~1 s when its alert lands (like the tv_ row tint)
-     rgb(218 183 214 / .45)  Mauve 300   inner hairline, lit together with the wash, then back to grey
-   Card text stays white (100% / 60%): ≥ 4.5:1 on the glass over the brightest frames, wash included.
+   The cards themselves never change colour (user, 2026-10-10): grey glass in, grey glass out, like tv_/cv_ cards.
+   Card text stays white (100% / 60%): ≥ 4.5:1 on the glass over the brightest frames.
 
-   Motion (approved motion language, as tv_/cv_). One 8 s loop (= the video):
-     · cards = big-card settle: rise 16 + .97 → 1 + blur 10 → 0, .9 s cubic-bezier(.16,1,.3,1), at 1.0 / 2.8 / 4.6 s
-     · their text + time blur-fade in (.5 s ease-out, blur 4) .3 s into the settle
-     · the "!" badge pops from 0 on the spring cubic-bezier(.34,1.56,.64,1), .5 s, with a short Mauve glow
-     · everything blur-fades out (opacity + blur 6, .45 s ease-in) at 7.2–7.8 s, top card first. Nothing drops from above.
+   Motion = the tab 4 alert card (.tv_event) in clarify-tabs.css, on one 8 s loop (= the video):
+     · cards = tv-scale: opacity 0 + scale .9 + blur 8 → none, .5 s cubic-bezier(.65,0,.35,1), at 1.0 / 2.8 / 4.6 s
+     · the "!" badge = tv-pop: from 0 on the spring cubic-bezier(.34,1.56,.64,1), .55 s, .25 s after its card,
+       with a short Mauve glow ring (its only colour)
+     · exit = tv-out: opacity + blur 6, .3 s ease-in, at 7.2 / 7.28 / 7.35 s, top card first. Nothing drops from above.
      · fill-mode backwards, will-change: transform on every animated element; reduced motion = the final frame.
    The site script owns the sync (hooks as in cv_):
      · .is-active on .hv_component → the loop runs. Remove it, reflow, add it again whenever the video loops.
@@ -50,18 +51,16 @@
   --text-time: rgb(255 255 255 / 0.6);        /* Figma .45 = 3.6:1; .6 passes */
   /* alert = Mauve (see the header) */
   --alert-fill: #ecdcea;                      /* Mauve 150 — lighter badge (user, 2026-10-10) */
-  --alert-ink: #583c56;                       /* Mauve ink, 5.3:1 on the fill */
+  --alert-ink: #583c56;                       /* Mauve ink, 7.3:1 on the fill */
   --alert-glow: rgb(218 183 214 / 0.6);       /* Mauve 300 glow */
   --alert-glow-0: rgb(218 183 214 / 0);
-  --alert-wash: rgb(88 60 86 / 0.55);         /* card body tint when the alert lands */
-  --alert-line: rgb(218 183 214 / 0.45);      /* inner hairline, lit with the wash */
   --glass-back: rgb(51 47 47 / 0.5);
   --glass-body: rgb(51 47 47 / 0.5);
   --glass-line: rgb(139 139 139 / 0.2);
   --glass-line-in: rgb(101 101 101 / 0.2);
   --font-sans: var(--_typography---font--primary-family, Geist), system-ui, sans-serif;
   --font-mono: var(--_typography---font--secondary-family, 'Geist Mono'), ui-monospace, monospace;
-  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -178,14 +177,17 @@
 }
 
 /* ---------- Motion: one 8 s loop, restarted by the site script with the video ---------- */
+/* Same entrance as the tab 4 alert card (.tv_event in clarify-tabs.css), the tabs' closest card to these:
+     card  = tv-scale: opacity 0 + scale .9 + blur 8 → none, .5 s easeInOutCubic cubic-bezier(.65,0,.35,1)
+     "!"   = tv-pop: scale 0 → 1 (opacity in by half-way), .55 s spring cubic-bezier(.34,1.56,.64,1), .25 s after its
+             card; Mauve glow ring 0 → 6 px fading out over the same .55 s
+     exit  = tv-out: opacity + blur 6, .3 s ease-in
+   Card n starts at s = 1.0 / 2.8 / 4.6 s (with the video). Percent = seconds / 8. */
 .wf-design-mode .hv_visual,
 .wf-design-mode .hv_visual * { animation: none !important; }
 
 .hv_component.is-active .hv_card,
-.hv_component.is-active .hv_card_body,
-.hv_component.is-active .hv_card_icon,
-.hv_component.is-active .hv_card_text,
-.hv_component.is-active .hv_card_time {
+.hv_component.is-active .hv_card_icon {
   animation-duration: var(--hv-loop);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -195,99 +197,48 @@
 .hv_component.is-active .hv_card.is-1 { animation-name: hv-card-1; }
 .hv_component.is-active .hv_card.is-2 { animation-name: hv-card-2; }
 .hv_component.is-active .hv_card.is-3 { animation-name: hv-card-3; }
-.hv_component.is-active .hv_card.is-1 .hv_card_body { animation-name: hv-wash-1; }
-.hv_component.is-active .hv_card.is-2 .hv_card_body { animation-name: hv-wash-2; }
-.hv_component.is-active .hv_card.is-3 .hv_card_body { animation-name: hv-wash-3; }
 .hv_component.is-active .hv_card.is-1 .hv_card_icon { animation-name: hv-icon-1; }
 .hv_component.is-active .hv_card.is-2 .hv_card_icon { animation-name: hv-icon-2; }
 .hv_component.is-active .hv_card.is-3 .hv_card_icon { animation-name: hv-icon-3; }
-.hv_component.is-active .hv_card.is-1 :is(.hv_card_text, .hv_card_time) { animation-name: hv-text-1; }
-.hv_component.is-active .hv_card.is-2 :is(.hv_card_text, .hv_card_time) { animation-name: hv-text-2; }
-.hv_component.is-active .hv_card.is-3 :is(.hv_card_text, .hv_card_time) { animation-name: hv-text-3; }
 
 .hv_component.is-paused .hv_card,
-.hv_component.is-paused .hv_card_body,
-.hv_component.is-paused .hv_card_icon,
-.hv_component.is-paused .hv_card_text,
-.hv_component.is-paused .hv_card_time { animation-play-state: paused; }
+.hv_component.is-paused .hv_card_icon { animation-play-state: paused; }
 
-/* Percent = seconds / 8. Card n starts at s = 1.0 / 2.8 / 4.6 s.
-   Settle s → s + .9 (rise 16 + .97 → 1 + blur 10 → 0, settle curve), hold, blur-fade out .45 s (opacity + blur 6, ease-in).
+/* card: scale in s → s + .5, hold, out (.3 s) at 7.2 / 7.28 / 7.35 s.
    The hold says filter: none, so no filter sits on the glass (a held filter kills its backdrop blur). */
 @keyframes hv-card-1 {
-  0%, 12.5% { opacity: 0; transform: translateY(calc(16 * var(--hv-u))) scale(0.97); filter: blur(calc(10 * var(--hv-u)));
-    animation-timing-function: var(--ease-settle); }
-  23.75% { opacity: 1; transform: none; filter: none; }
+  0%, 12.5% { opacity: 0; transform: scale(0.9); filter: blur(calc(8 * var(--hv-u))); animation-timing-function: var(--ease-in-out-cubic); }
+  18.75% { opacity: 1; transform: none; filter: none; }
   90% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
-  95.625%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
+  93.75%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
 }
 @keyframes hv-card-2 {
-  0%, 35% { opacity: 0; transform: translateY(calc(16 * var(--hv-u))) scale(0.97); filter: blur(calc(10 * var(--hv-u)));
-    animation-timing-function: var(--ease-settle); }
-  46.25% { opacity: 1; transform: none; filter: none; }
+  0%, 35% { opacity: 0; transform: scale(0.9); filter: blur(calc(8 * var(--hv-u))); animation-timing-function: var(--ease-in-out-cubic); }
+  41.25% { opacity: 1; transform: none; filter: none; }
   91% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
-  96.625%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
+  94.75%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
 }
 @keyframes hv-card-3 {
-  0%, 57.5% { opacity: 0; transform: translateY(calc(16 * var(--hv-u))) scale(0.97); filter: blur(calc(10 * var(--hv-u)));
-    animation-timing-function: var(--ease-settle); }
-  68.75% { opacity: 1; transform: none; filter: none; }
+  0%, 57.5% { opacity: 0; transform: scale(0.9); filter: blur(calc(8 * var(--hv-u))); animation-timing-function: var(--ease-in-out-cubic); }
+  63.75% { opacity: 1; transform: none; filter: none; }
   91.875% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
-  97.5%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
+  95.625%, 100% { opacity: 0; transform: none; filter: blur(calc(6 * var(--hv-u))); }
 }
-/* text + time blur-fade in, s + .3 → s + .8 */
-@keyframes hv-text-1 {
-  0%, 16.25% { opacity: 0; filter: blur(calc(4 * var(--hv-u))); animation-timing-function: ease-out; }
-  22.5%, 100% { opacity: 1; filter: none; }
-}
-@keyframes hv-text-2 {
-  0%, 38.75% { opacity: 0; filter: blur(calc(4 * var(--hv-u))); animation-timing-function: ease-out; }
-  45%, 100% { opacity: 1; filter: none; }
-}
-@keyframes hv-text-3 {
-  0%, 61.25% { opacity: 0; filter: blur(calc(4 * var(--hv-u))); animation-timing-function: ease-out; }
-  67.5%, 100% { opacity: 1; filter: none; }
-}
-/* the "!" badge pops from 0 on the spring at s + .35 (.5 s), its Mauve glow blooms and rings out by s + 1.65 */
+/* "!" badge: tv-pop from s + .25 to s + .8 */
 @keyframes hv-icon-1 {
-  0%, 16.875% { transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow), 0 0 0 0 var(--alert-glow);
-    animation-timing-function: var(--ease-spring); }
-  23.125% { transform: scale(1); box-shadow: 0 0 0 0 var(--alert-glow), 0 0 calc(12 * var(--hv-u)) 0 var(--alert-glow);
-    animation-timing-function: ease-out; }
-  33.125%, 100% { transform: scale(1);
-    box-shadow: 0 0 0 calc(7 * var(--hv-u)) var(--alert-glow-0), 0 0 calc(12 * var(--hv-u)) 0 var(--alert-glow-0); }
+  0%, 15.625% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
+  19.0625% { opacity: 1; }
+  22.5%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
 }
 @keyframes hv-icon-2 {
-  0%, 39.375% { transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow), 0 0 0 0 var(--alert-glow);
-    animation-timing-function: var(--ease-spring); }
-  45.625% { transform: scale(1); box-shadow: 0 0 0 0 var(--alert-glow), 0 0 calc(12 * var(--hv-u)) 0 var(--alert-glow);
-    animation-timing-function: ease-out; }
-  55.625%, 100% { transform: scale(1);
-    box-shadow: 0 0 0 calc(7 * var(--hv-u)) var(--alert-glow-0), 0 0 calc(12 * var(--hv-u)) 0 var(--alert-glow-0); }
+  0%, 38.125% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
+  41.5625% { opacity: 1; }
+  45%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
 }
 @keyframes hv-icon-3 {
-  0%, 61.875% { transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow), 0 0 0 0 var(--alert-glow);
-    animation-timing-function: var(--ease-spring); }
-  68.125% { transform: scale(1); box-shadow: 0 0 0 0 var(--alert-glow), 0 0 calc(12 * var(--hv-u)) 0 var(--alert-glow);
-    animation-timing-function: ease-out; }
-  78.125%, 100% { transform: scale(1);
-    box-shadow: 0 0 0 calc(7 * var(--hv-u)) var(--alert-glow-0), 0 0 calc(12 * var(--hv-u)) 0 var(--alert-glow-0); }
-}
-/* the card body tints Mauve as its badge pops (s + .35 → peak s + .85), then settles back to grey glass by s + 1.85 */
-@keyframes hv-wash-1 {
-  0%, 16.875% { background-color: var(--glass-body); border-color: var(--glass-line-in); animation-timing-function: ease-out; }
-  23.125% { background-color: var(--alert-wash); border-color: var(--alert-line); animation-timing-function: ease-in-out; }
-  35.625%, 100% { background-color: var(--glass-body); border-color: var(--glass-line-in); }
-}
-@keyframes hv-wash-2 {
-  0%, 39.375% { background-color: var(--glass-body); border-color: var(--glass-line-in); animation-timing-function: ease-out; }
-  45.625% { background-color: var(--alert-wash); border-color: var(--alert-line); animation-timing-function: ease-in-out; }
-  58.125%, 100% { background-color: var(--glass-body); border-color: var(--glass-line-in); }
-}
-@keyframes hv-wash-3 {
-  0%, 61.875% { background-color: var(--glass-body); border-color: var(--glass-line-in); animation-timing-function: ease-out; }
-  68.125% { background-color: var(--alert-wash); border-color: var(--alert-line); animation-timing-function: ease-in-out; }
-  80.625%, 100% { background-color: var(--glass-body); border-color: var(--glass-line-in); }
+  0%, 60.625% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
+  64.0625% { opacity: 1; }
+  67.5%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
 }
 
 /* Reduced motion = the final state (all cards in place, static). The video library keeps the poster up. */
