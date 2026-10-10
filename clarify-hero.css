@@ -13,7 +13,7 @@
    Alert colour = the Mauve family the tab visuals use for fired events / alerts (tv_match_fired, tv_trow_chip),
    so the heroes and the sections below speak one colour (user, 2026-10-10: mauve instead of red in the heroes too).
    Hard-coded like tv_/cv_ (visuals don't bind to the design system):
-     #dab7d6                 Mauve 300   "!" badge fill, solid
+     #ecdcea                 Mauve 150   "!" badge fill, solid (lightened from Mauve 300 #dab7d6)
      #583c56                 Mauve ink   "!" glyph on the badge, 5.3:1
      rgb(218 183 214 / .6)   Mauve 300   badge pop glow + ring (= --glow-mauve in tv_/cv_)
      rgb(88 60 86 / .55)     Mauve ink   card body wash for ~1 s when its alert lands (like the tv_ row tint)
@@ -49,7 +49,7 @@
   --text-secondary: rgb(255 255 255 / 0.6);   /* Figma .55; .6 keeps 4.5:1 over the brightest water */
   --text-time: rgb(255 255 255 / 0.6);        /* Figma .45 = 3.6:1; .6 passes */
   /* alert = Mauve (see the header) */
-  --alert-fill: #dab7d6;                      /* Mauve 300 */
+  --alert-fill: #ecdcea;                      /* Mauve 150 — lighter badge (user, 2026-10-10) */
   --alert-ink: #583c56;                       /* Mauve ink, 5.3:1 on the fill */
   --alert-glow: rgb(218 183 214 / 0.6);       /* Mauve 300 glow */
   --alert-glow-0: rgb(218 183 214 / 0);
