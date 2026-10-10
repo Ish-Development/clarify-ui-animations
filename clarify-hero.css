@@ -164,8 +164,8 @@
   white-space: nowrap;
 }
 
-/* ---------- Phone (≤ 48em): the first two cards stacked like desktop, centred; from 10% down the 394 × 493 band, home
-   y 133 of 393 × 852. (User 2026-10-10: max two cards on phone so they don't cover the hero.) ---------- */
+/* ---------- Phone (≤ 48em): max two cards at a time (rolling pair, see Motion), centred; from 10% down the 394 × 493
+   band, home y 133 of 393 × 852. (User 2026-10-10.) ---------- */
 @container (width <= 48em) {
   .hv_visual { --hv-u: min(100cqw / 394, 1.27px); }
   .hv_stack, .hv_component.is-home .hv_stack {
@@ -175,7 +175,6 @@
     top: calc(49 * var(--hv-u));
   }
   .hv_component.is-home .hv_stack { top: calc(133 * var(--hv-u)); }
-  .hv_card.is-3 { display: none; }
 }
 
 /* ---------- Motion: one 8 s loop, restarted by the site script with the video ---------- */
@@ -242,6 +241,44 @@
   0%, 36.25% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
   38.75% { opacity: 1; }
   41.25%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
+}
+
+
+/* Phone (≤ 48em): a rolling pair — never more than two cards on screen, all three alerts shown (user, 2026-10-10).
+   Cards 1 and 2 snap in as on desktop; at 2.8 s card 1 scales down and fades, card 2 slides up into the top slot
+   (translateY by one card + gap) and card 3 snaps into the bottom slot (it lives in slot 3, shifted up by one).
+   Card 1's own icon keeps its desktop pop; card 3's pop is retimed to its arrival. */
+@container (width <= 48em) {
+  .hv_component.is-active .hv_card.is-1 { animation-name: hv-pcard-1; }
+  .hv_component.is-active .hv_card.is-2 { animation-name: hv-pcard-2; }
+  .hv_component.is-active .hv_card.is-3 { animation-name: hv-pcard-3; }
+  .hv_component.is-active .hv_card.is-3 .hv_card_icon { animation-name: hv-picon-3; }
+  .hv_component:not(.is-active) .hv_card.is-1 { display: none; }   /* static stack (reduced motion / no video): cards 2 + 3 */
+}
+@keyframes hv-pcard-1 {
+  0%, 10% { opacity: 0; transform: scale(0.94); filter: blur(calc(6 * var(--hv-u))); animation-timing-function: var(--ease-snap); }
+  13.75% { opacity: 1; transform: none; filter: none; }
+  35% { opacity: 1; transform: none; filter: none; animation-timing-function: ease-in; }
+  38.12%, 100% { opacity: 0; transform: scale(0.94); filter: blur(calc(6 * var(--hv-u))); }
+}
+@keyframes hv-pcard-2 {
+  0%, 22.5% { opacity: 0; transform: scale(0.94); filter: blur(calc(6 * var(--hv-u))); animation-timing-function: var(--ease-snap); }
+  26.25% { opacity: 1; transform: none; filter: none; }
+  35.62% { opacity: 1; transform: none; filter: none; animation-timing-function: var(--ease-snap); }
+  40.62% { opacity: 1; transform: translateY(calc(-100% - 8 * var(--hv-u))); filter: none; }
+  90% { opacity: 1; transform: translateY(calc(-100% - 8 * var(--hv-u))); filter: none; animation-timing-function: ease-in; }
+  92.5%, 100% { opacity: 0; transform: translateY(calc(-100% - 8 * var(--hv-u))); filter: blur(calc(6 * var(--hv-u))); }
+}
+@keyframes hv-pcard-3 {
+  0%, 36.88% { opacity: 0; transform: translateY(calc(-100% - 8 * var(--hv-u))) scale(0.94); filter: blur(calc(6 * var(--hv-u))); animation-timing-function: var(--ease-snap); }
+  40.62% { opacity: 1; transform: translateY(calc(-100% - 8 * var(--hv-u))); filter: none; }
+  90.75% { opacity: 1; transform: translateY(calc(-100% - 8 * var(--hv-u))); filter: none; animation-timing-function: ease-in; }
+  93.25%, 100% { opacity: 0; transform: translateY(calc(-100% - 8 * var(--hv-u))); filter: blur(calc(6 * var(--hv-u))); }
+}
+@keyframes hv-picon-3 {
+  0%, 38.12% { opacity: 0; transform: scale(0); box-shadow: 0 0 0 0 var(--alert-glow); animation-timing-function: var(--ease-spring); }
+  40.62% { opacity: 1; }
+  43.12%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 calc(6 * var(--hv-u)) var(--alert-glow-0); }
 }
 
 /* Reduced motion = the final state (all cards in place, static). The video library keeps the poster up. */
