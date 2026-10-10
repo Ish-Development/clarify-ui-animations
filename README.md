@@ -1,19 +1,21 @@
 # Clarify UI animations
 
-Hosted CSS for the animated section visuals on clarify.io (Webflow). Two files, one per component.
-CSS only: the scripts (tabs, in-view, count-up) live in Webflow. Images live in Webflow Assets.
+Hosted CSS for the animated visuals on clarify.io (Webflow). Three files, one per component.
+CSS only: the scripts (tabs, in-view, count-up, hero video sync) live in Webflow. Images and videos live in Webflow
+Assets / Vimeo.
 
 | Component | Link tag (Head) |
 |---|---|
 | Built to extend cards | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-built-to-extend.min.css">` |
 | Tabs (What Clarify does, How it works) | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-tabs.min.css">` |
+| Hero alert cards (4 verticals + Home), since 4.1.0 | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-hero.min.css">` |
 
 `@4` follows the latest 4.x release. Pin an exact version (`@4.0.0`) to freeze it. The readable sources sit next to
-the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`).
+the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`, `clarify-hero.css`).
 
 ## Rules
 
-- **Naming (Lumos):** Built to extend = `cv_*`, tabs = `tv_*`. Path-named elements (`cv_msg_avatar`,
+- **Naming (Lumos):** Built to extend = `cv_*`, tabs = `tv_*`, hero = `hv_*`. Path-named elements (`cv_msg_avatar`,
   `tv_glass_panel`), `is-*` combo classes for variants and states, `data-cv*` / `data-tv*` hooks.
 - **Built to extend:** a parent div owns the size (`.cv_component`, an inline-size container; 1 Figma px =
   `--u` = `100cqw / 451`). Every image is absolutely positioned in its wrapper, decorative (`alt=""`).
@@ -23,6 +25,6 @@ the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`).
 
 ## Versions
 
-- `@4`: two files (Built to extend `cv_*`, tabs `tv_*`), CSS only, minified.
+- `@4`: one file per component (Built to extend `cv_*`, tabs `tv_*`, hero `hv_*` since 4.1.0), CSS only, minified.
 - `@3`: one file for everything (`clarify-tabs.min.css` + `.min.js`, `cv_*`). Frozen.
 - `@2`, `@1`: older naming. Frozen.
