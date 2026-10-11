@@ -6,14 +6,12 @@
 
    Each digit is a 1em window (.nv_number_digit); its ::before is a strip 0…9 0…9 … that ends --nv-roll lines down
    (roll mod 10 = the digit), so the resting state is the final number by construction. Same duration for every
-   digit: the ones that travel further spin faster. Blur grows to the right (--nv-i) and the digits land left → right
-   (stagger), so the number sharpens in a sweep. Only transform + filter animate. */
+   digit: the ones that travel further spin faster, and they land left → right (stagger, --nv-i). No blur (user,
+   2026-10-11): only transform animates. */
 
 .nv_number {
   --nv-dur: 1.8s;
   --nv-stagger: 90ms;           /* per digit, left → right */
-  --nv-blur-0: .04em;           /* first digit's blur at the start (≈ 9 px at 220) */
-  --nv-blur-step: .014em;       /* + per digit to the right */
   --nv-ease: cubic-bezier(0.16, 1, 0.3, 1);
   font-variant-numeric: tabular-nums;   /* every digit the same width: nothing shifts while it rolls */
   white-space: nowrap;
@@ -37,7 +35,7 @@
 .nv_number_digit {
   position: relative; display: inline-block; line-height: 1;
   visibility: hidden;                   /* the typed digit keeps the width; the strip shows */
-  clip-path: inset(0 -0.3em);           /* a 1em window, with room sideways for the blur */
+  clip-path: inset(0 -0.1em);           /* a 1em window (a hair of room sideways for the glyph edges) */
 }
 .nv_number_digit::before {
   content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";
@@ -48,18 +46,11 @@
 .nv_number_sep { display: inline-block; }
 
 .nv_number.is-active .nv_number_digit::before {
-  animation:
-    nv-roll var(--nv-dur) var(--nv-ease) calc(var(--nv-i, 0) * var(--nv-stagger)) backwards,
-    nv-blur var(--nv-dur) var(--nv-ease) calc(var(--nv-i, 0) * var(--nv-stagger)) backwards;
+  animation: nv-roll var(--nv-dur) var(--nv-ease) calc(var(--nv-i, 0) * var(--nv-stagger)) backwards;
   will-change: transform;
 }
 .nv_number.is-active .nv_number_sep { animation: nv-sep 0.5s var(--nv-ease) 0.25s backwards; will-change: transform; }
 @keyframes nv-roll { from { transform: translateY(0); } }
-@keyframes nv-blur {
-  from { filter: blur(calc(var(--nv-blur-0) + var(--nv-i, 0) * var(--nv-blur-step))); }
-  60%  { filter: blur(calc((var(--nv-blur-0) + var(--nv-i, 0) * var(--nv-blur-step)) * 0.25)); }
-  to   { filter: blur(0); }
-}
 @keyframes nv-sep { from { opacity: 0; transform: translateY(0.08em); } }
 
 /* ---------- Control ---------- */
