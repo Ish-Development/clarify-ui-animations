@@ -1,0 +1,70 @@
+/* Clarify — big number roll (nv_*), e.g. the "10.000.000" in the Built to extend section (staging: scale1_cell_number)
+   Hosted: https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-number.min.css
+   Pairs with clarify-number.min.js: add data-nv="roll" to the number's text element; the script builds the digits
+   from its text, fits it to its box and adds .is-active (+ .is-paused until it's in view). Size, weight and tracking
+   come from the site's own text class. Without the script, or with reduced motion, the plain number shows.
+
+   Each digit is a 1em window (.nv_number_digit); its ::before is a strip 0…9 0…9 … that ends --nv-roll lines down
+   (roll mod 10 = the digit), so the resting state is the final number by construction. Same duration for every
+   digit: the ones that travel further spin faster. Blur grows to the right (--nv-i) and the digits land left → right
+   (stagger), so the number sharpens in a sweep. Only transform + filter animate. */
+
+.nv_number {
+  --nv-dur: 1.8s;
+  --nv-stagger: 90ms;           /* per digit, left → right */
+  --nv-blur-0: .04em;           /* first digit's blur at the start (≈ 9 px at 220) */
+  --nv-blur-step: .014em;       /* + per digit to the right */
+  --nv-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  font-variant-numeric: tabular-nums;   /* every digit the same width: nothing shifts while it rolls */
+  white-space: nowrap;
+  container-type: inline-size;          /* the roll fits this box (cqw), so it never runs past its cell */
+}
+.nv_number_sr {                         /* the real number, for screen readers */
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+/* Figma: Text/text-primary → Text/text-tertiary over the first 45 % of the number. A mask, because the digits are
+   clipped windows (background-clip: text can't reach them): Bone/50 at 46 % on Carbon ≈ Text/text-tertiary.
+   Size: the site's (1em), or smaller when the box is too narrow. --nv-fit = the number's width in em, measured by
+   the script (fallback 5.35 = "10.000.000" in tabular Geist). */
+.nv_number_roll {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  font-size: min(1em, calc(100cqw / var(--nv-fit, 5.35)));
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.46) 45%);
+  mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.46) 45%);
+}
+.nv_number_digit {
+  position: relative; display: inline-block; line-height: 1;
+  visibility: hidden;                   /* the typed digit keeps the width; the strip shows */
+  clip-path: inset(0 -0.3em);           /* a 1em window, with room sideways for the blur */
+}
+.nv_number_digit::before {
+  content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";
+  position: absolute; left: 0; top: 0; width: 100%;
+  white-space: pre; visibility: visible;
+  transform: translateY(calc(var(--nv-roll) * -1em));
+}
+.nv_number_sep { display: inline-block; }
+
+.nv_number.is-active .nv_number_digit::before {
+  animation:
+    nv-roll var(--nv-dur) var(--nv-ease) calc(var(--nv-i, 0) * var(--nv-stagger)) backwards,
+    nv-blur var(--nv-dur) var(--nv-ease) calc(var(--nv-i, 0) * var(--nv-stagger)) backwards;
+  will-change: transform;
+}
+.nv_number.is-active .nv_number_sep { animation: nv-sep 0.5s var(--nv-ease) 0.25s backwards; will-change: transform; }
+@keyframes nv-roll { from { transform: translateY(0); } }
+@keyframes nv-blur {
+  from { filter: blur(calc(var(--nv-blur-0) + var(--nv-i, 0) * var(--nv-blur-step))); }
+  60%  { filter: blur(calc((var(--nv-blur-0) + var(--nv-i, 0) * var(--nv-blur-step)) * 0.25)); }
+  to   { filter: blur(0); }
+}
+@keyframes nv-sep { from { opacity: 0; transform: translateY(0.08em); } }
+
+/* ---------- Control ---------- */
+.nv_number.is-paused *, .nv_number.is-paused .nv_number_digit::before { animation-play-state: paused !important; }
+.wf-design-mode .nv_number *, .wf-design-mode .nv_number_digit::before { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .nv_number *, .nv_number_digit::before { animation: none !important; }
+}

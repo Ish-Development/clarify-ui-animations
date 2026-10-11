@@ -6,9 +6,10 @@ Assets / Vimeo.
 
 | Component | Link tag (Head) |
 |---|---|
-| Built to extend cards (+ the big number roll, since 4.3.0) | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-built-to-extend.min.css">` |
+| Built to extend cards | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-built-to-extend.min.css">` |
 | Tabs (What Clarify does, How it works) | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-tabs.min.css">` |
 | Hero alert cards (4 verticals + Home), since 4.1.0 | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-hero.min.css">` |
+| Big number roll, since 4.4.0 | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-number.min.css">` + before `</body>`: `<script src="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-number.min.js" defer></script>` |
 
 `@4` follows the latest 4.x release. Pin an exact version (`@4.0.0`) to freeze it. The readable sources sit next to
 the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`, `clarify-hero.css`).
@@ -26,6 +27,7 @@ the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`, `clarify-
 ## Versions
 
 - `@4`: one file per component (Built to extend `cv_*`, tabs `tv_*`, hero `hv_*` since 4.1.0), CSS only, minified.
-  4.3.0 adds the big number digit roll (`cv_number`) to the Built to extend file.
+  4.4.0: the big number digit roll is its own component, `clarify-number.min.css` + `clarify-number.min.js` (`nv_*`).
+  (It sat in the Built to extend file as `cv_number` in 4.3.x, before anyone used it.)
 - `@3`: one file for everything (`clarify-tabs.min.css` + `.min.js`, `cv_*`). Frozen.
 - `@2`, `@1`: older naming. Frozen.
