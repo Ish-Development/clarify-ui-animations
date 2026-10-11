@@ -6,7 +6,7 @@ Assets / Vimeo.
 
 | Component | Link tag (Head) |
 |---|---|
-| Built to extend cards | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-built-to-extend.min.css">` |
+| Built to extend cards (+ the big number roll, since 4.3.0) | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-built-to-extend.min.css">` |
 | Tabs (What Clarify does, How it works) | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-tabs.min.css">` |
 | Hero alert cards (4 verticals + Home), since 4.1.0 | `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Ish-Development/clarify-ui-animations@4/clarify-hero.min.css">` |
 
@@ -26,5 +26,6 @@ the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`, `clarify-
 ## Versions
 
 - `@4`: one file per component (Built to extend `cv_*`, tabs `tv_*`, hero `hv_*` since 4.1.0), CSS only, minified.
+  4.3.0 adds the big number digit roll (`cv_number`) to the Built to extend file.
 - `@3`: one file for everything (`clarify-tabs.min.css` + `.min.js`, `cv_*`). Frozen.
 - `@2`, `@1`: older naming. Frozen.
