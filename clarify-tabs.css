@@ -741,7 +741,7 @@
 
 /* ################################ PART 2 · MOTION ################################ */
 .tv_visual {
-  --k: 2;                 /* speed: every timing below × --k (2 = 2× slower, user 2026-10-13; tabs stay 10 s (data-tab-duration)) */
+  --k: 1;                 /* speed: every timing below × --k. Keep 1: the visuals play at this speed; longer tabs = the devs' data-tab-duration (user, 2026-10-13) */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
