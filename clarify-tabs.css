@@ -2025,7 +2025,7 @@ html:not(.is-tv-ready) .tv_match_row .tv_match_cond .tv_count {
 .tv_act_head {
   display: flex;
   flex-direction: column;
-  gap: calc(12 * var(--tv-u));
+  gap: calc(16 * var(--tv-u));    /* Figma Header gap (user, 2026-10-13) */
 }
 .tv_act_head .tv_head_row {
   display: flex;

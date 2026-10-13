@@ -31,5 +31,6 @@ the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`, `clarify-
   (It sat in the Built to extend file as `cv_number` in 4.3.x, before anyone used it.)
   4.5.0: the digits roll all the way to the cell's lines (the script measures the padding); tabs use the site's font variables (the mono is "Geistmono" in Webflow).
   4.5.1: tab visuals back to their original speed (4.5.0 had made them 2× slower by mistake).
+  4.5.2: How it works · Act header, 16 between the title row and the phase chips (was 12), as in Figma.
 - `@3`: one file for everything (`clarify-tabs.min.css` + `.min.js`, `cv_*`). Frozen.
 - `@2`, `@1`: older naming. Frozen.
