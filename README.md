@@ -29,5 +29,7 @@ the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`, `clarify-
 - `@4`: one file per component (Built to extend `cv_*`, tabs `tv_*`, hero `hv_*` since 4.1.0), CSS only, minified.
   4.4.0: the big number digit roll is its own component, `clarify-number.min.css` + `clarify-number.min.js` (`nv_*`).
   (It sat in the Built to extend file as `cv_number` in 4.3.x, before anyone used it.)
+  4.5.0: the digits roll all the way to the cell's lines (the script measures the padding); tab visuals 2× slower
+  (`--k: 2`, for 10–12 s tabs); tabs use the site's font variables (the mono is "Geistmono" in Webflow).
 - `@3`: one file for everything (`clarify-tabs.min.css` + `.min.js`, `cv_*`). Frozen.
 - `@2`, `@1`: older naming. Frozen.

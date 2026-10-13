@@ -7,7 +7,12 @@
    Each digit is a 1em window (.nv_number_digit); its ::before is a strip 0…9 0…9 … that ends --nv-roll lines down
    (roll mod 10 = the digit), so the resting state is the final number by construction. Same duration for every
    digit: the ones that travel further spin faster, and they land left → right (stagger, --nv-i). No blur (user,
-   2026-10-11): only transform animates. */
+   2026-10-11): only transform animates.
+
+   Full-height window (4.5.0): the script measures the space between the digits and the cell's edges (--nv-bt top,
+   --nv-bb bottom, in px: the number element's own padding box, or the box of an ancestor with data-nv-clip), and
+   each window grows by that much, so the digits roll in and out at the cell's lines instead of vanishing at the text
+   box. The strip's line pitch grows with it (1em + --nv-bt + --nv-bb), so no neighbouring digit peeks in at rest. */
 
 .nv_number {
   --nv-dur: 1.8s;
@@ -27,21 +32,27 @@
    the script (fallback 5.35 = "10.000.000" in tabular Geist). */
 .nv_number_roll {
   display: inline-flex;
+  padding-block: var(--nv-bt, 0px) var(--nv-bb, 0px);   /* the mask has to cover the taller windows */
+  margin-block: calc(-1 * var(--nv-bt, 0px)) calc(-1 * var(--nv-bb, 0px));
   font-variant-numeric: tabular-nums;
   font-size: min(1em, calc(100cqw / var(--nv-fit, 5.35)));
   -webkit-mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.46) 45%);
   mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.46) 45%);
 }
 .nv_number_digit {
+  --nv-pitch: calc(1em + var(--nv-bt, 0px) + var(--nv-bb, 0px));  /* one line of the strip = the whole window */
   position: relative; display: inline-block; line-height: 1;
   visibility: hidden;                   /* the typed digit keeps the width; the strip shows */
-  clip-path: inset(0 -0.1em);           /* a 1em window (a hair of room sideways for the glyph edges) */
+  /* the 1em text box, stretched up and down to the cell's lines (a hair of room sideways for the glyph edges) */
+  clip-path: inset(calc(-1 * var(--nv-bt, 0px)) -0.1em calc(-1 * var(--nv-bb, 0px)));
 }
 .nv_number_digit::before {
   content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";
-  position: absolute; left: 0; top: 0; width: 100%;
+  position: absolute; left: 0; width: 100%;
+  top: calc(-0.5 * (var(--nv-bt, 0px) + var(--nv-bb, 0px)));     /* each digit centred in its line, as typed */
+  line-height: var(--nv-pitch);
   white-space: pre; visibility: visible;
-  transform: translateY(calc(var(--nv-roll) * -1em));
+  transform: translateY(calc(var(--nv-roll) * -1 * var(--nv-pitch)));
 }
 .nv_number_sep { display: inline-block; }
 

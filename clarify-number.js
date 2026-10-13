@@ -5,7 +5,9 @@
    10.000.000</p>). On load the script:
      1. builds the digits from its text (one 1em window per digit, the dots/commas/spaces as separators) and keeps the
         real number for screen readers;
-     2. measures the number (--nv-fit) so the CSS can shrink it to fit a narrow box;
+     2. measures the number (--nv-fit) so the CSS can shrink it to fit a narrow box, and the space between the digits
+        and the cell's lines (--nv-bt / --nv-bb) so they roll all the way to the lines. The cell = the element's own
+        padding box, or an ancestor with data-nv-clip. Re-measured when the cell resizes;
      3. plays the roll once, when the number scrolls into view (.is-active + .is-paused until then).
    Reduced motion: builds nothing, the plain number shows. API: window.ClarifyNumber.init(scope), .replay(el). */
 (function () {
@@ -50,6 +52,8 @@
     el.appendChild(sr);
     el.appendChild(roll);
     fit(el);
+    // breakpoints change the padding and the size: measure again when the cell resizes
+    if ("ResizeObserver" in window) new ResizeObserver(function () { bleed(el); }).observe(el.closest("[data-nv-clip]") || el);
   }
 
   // the number's width in em (any font, any tracking), so the CSS can fit it: min(1em, 100cqw / --nv-fit)
@@ -58,6 +62,19 @@
     if (!roll) return;
     var fs = parseFloat(getComputedStyle(roll).fontSize);
     if (fs) el.style.setProperty("--nv-fit", ((roll.getBoundingClientRect().width / fs) * 1.01).toFixed(3));
+    bleed(el);
+  }
+
+  // how far the digit windows reach above and below the text box: up to the cell's inner edges (its lines)
+  function bleed(el) {
+    var digit = el.querySelector(".nv_number_digit");
+    if (!digit) return;
+    var cell = el.closest("[data-nv-clip]") || el;
+    var c = cell.getBoundingClientRect(), cs = getComputedStyle(cell), d = digit.getBoundingClientRect();
+    var top = d.top - c.top - parseFloat(cs.borderTopWidth);
+    var bot = c.bottom - parseFloat(cs.borderBottomWidth) - d.bottom;
+    el.style.setProperty("--nv-bt", Math.max(0, Math.floor(top)) + "px");
+    el.style.setProperty("--nv-bb", Math.max(0, Math.floor(bot)) + "px");
   }
 
   function arm(el) {

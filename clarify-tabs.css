@@ -21,8 +21,9 @@
   --mist-600: #5f8db4;
   --mauve-600: #a2789d;
   --slate-200: #e4e9ec;
-  --font-sans: "Geist", system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, monospace;
+  /* the site's own fonts (Webflow names the mono "Geistmono", so a literal "Geist Mono" falls back to the system mono) */
+  --font-sans: var(--_typography---font--primary-family, "Geist"), system-ui, sans-serif;
+  --font-mono: var(--_typography---font--secondary-family, "Geist Mono"), ui-monospace, monospace;
   --mist-dot: #a4c9e9;
   --mist-tag: #c4dcf2;
   --mist-ink: #2a4a65;
@@ -740,7 +741,7 @@
 
 /* ################################ PART 2 · MOTION ################################ */
 .tv_visual {
-  --k: 1;
+  --k: 2;                 /* speed: every timing below × --k (2 = 2× slower, user 2026-10-13; tabs stay 10 s (data-tab-duration)) */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
