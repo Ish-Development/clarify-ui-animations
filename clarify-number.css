@@ -12,7 +12,12 @@
    Full-height window (4.5.0): the script measures the space between the digits and the cell's edges (--nv-bt top,
    --nv-bb bottom, in px: the number element's own padding box, or the box of an ancestor with data-nv-clip), and
    each window grows by that much, so the digits roll in and out at the cell's lines instead of vanishing at the text
-   box. The strip's line pitch grows with it (1em + --nv-bt + --nv-bb), so no neighbouring digit peeks in at rest. */
+   box. The strip's line pitch grows with it (1em + --nv-bt + --nv-bb), so no neighbouring digit peeks in at rest.
+
+   Trim (4.5.3): a 1em text box has ~0.13em of empty space above and below Geist's digits, so the gap to the lines
+   looked like padding + that. The roll is trimmed to the digits (--nv-trim, Nikola's value: 0.5lh − 0.37em at lh 1),
+   so the gap to the lines = the cell's padding (space/6). The element is a flex box once built, so the site's line
+   box can't add space back when the number is shrunk to fit. */
 
 .nv_number {
   --nv-dur: 1.8s;
@@ -21,7 +26,10 @@
   font-variant-numeric: tabular-nums;   /* every digit the same width: nothing shifts while it rolls */
   white-space: nowrap;
   container-type: inline-size;          /* the roll fits this box (cqw), so it never runs past its cell */
+  --nv-trim: 0.13em;                    /* empty space above / below the digits in a 1em line (Geist) */
 }
+.nv_number[data-nv-ready] { display: flex; align-items: flex-start; }   /* no line box: the roll alone sets the height */
+.nv_number[data-nv-ready]::before, .nv_number[data-nv-ready]::after { content: none; }  /* the site's own trim, if any */
 .nv_number_sr {                         /* the real number, for screen readers */
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
   clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
@@ -33,7 +41,7 @@
 .nv_number_roll {
   display: inline-flex;
   padding-block: var(--nv-bt, 0px) var(--nv-bb, 0px);   /* the mask has to cover the taller windows */
-  margin-block: calc(-1 * var(--nv-bt, 0px)) calc(-1 * var(--nv-bb, 0px));
+  margin-block: calc(-1 * var(--nv-bt, 0px) - var(--nv-trim)) calc(-1 * var(--nv-bb, 0px) - var(--nv-trim));  /* + trim */
   font-variant-numeric: tabular-nums;
   font-size: min(1em, calc(100cqw / var(--nv-fit, 5.35)));
   -webkit-mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.46) 45%);
