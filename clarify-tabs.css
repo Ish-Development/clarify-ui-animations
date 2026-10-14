@@ -709,7 +709,11 @@
   top: calc(19 * var(--tv-u));
 }
 .tv_note.is-2 .tv_note_tag {
-  left: calc(248 * var(--tv-u));
+  /* centred on its line: the middle note has neighbours on both sides, so a long label ("Degasser on") still clears them */
+  left: calc(248.5 * var(--tv-u));
+  translate: -50% 0;
+  border-radius: calc(3 * var(--tv-u));
+  transform-origin: 50% 100%;
 }
 .tv_note.is-3 .tv_note_line {
   left: calc(320 * var(--tv-u));
