@@ -60,7 +60,9 @@
   top: calc(-0.5 * (var(--nv-bt, 0px) + var(--nv-bb, 0px)));     /* each digit centred in its line, as typed */
   line-height: var(--nv-pitch);
   white-space: pre; visibility: visible;
-  transform: translateY(calc(var(--nv-roll) * -1 * var(--nv-pitch)));
+  /* % of the strip's own drawn height (50 lines → 2 % each), not roll × --nv-pitch: WebKit snaps each text line to
+     whole px (89 instead of 89.16), so a px offset drifts by up to ~49 × 0.16 px and Safari stops the digits crooked */
+  transform: translateY(calc(var(--nv-roll) * -100% / 50));
 }
 .nv_number_sep { display: inline-block; }
 

@@ -34,6 +34,7 @@ the minified files (`clarify-built-to-extend.css`, `clarify-tabs.css`, `clarify-
   4.5.3: big number trimmed to its digits (`--nv-trim: 0.13em`), so the gap to the lines = the cell's padding.
   4.5.4: tabs: the middle chart note tag is centred on its line, so a long label ("Degasser on") clears its neighbours.
   4.5.5: Built to extend: the phone notifications and chat use Geist (the site font) instead of the system / SF Pro font.
+  4.5.6: big number roll lands straight on iPhone Safari (the strip moves by % of its own height; WebKit rounds its lines to whole px).
   4.5.2: How it works · Act header, 16 between the title row and the phase chips (was 12), as in Figma.
 - `@3`: one file for everything (`clarify-tabs.min.css` + `.min.js`, `cv_*`). Frozen.
 - `@2`, `@1`: older naming. Frozen.
